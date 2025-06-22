@@ -19,6 +19,8 @@ public:
     explicit CalculatorEngine(QObject *parent = nullptr);
 private:
     QVector<Token> tokenize(const QString& text);
+
+    double evaluate(QVector<Token> tokens);
 signals:
 };
 

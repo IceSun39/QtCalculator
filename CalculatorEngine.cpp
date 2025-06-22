@@ -4,7 +4,7 @@ CalculatorEngine::CalculatorEngine(QObject *parent)
     : QObject{parent}
 {}
 
-QVector<Token> tokenize(const QString& text){
+QVector<Token> CalculatorEngine::tokenize(const QString& text){
     QVector<Token> tokens;
     size_t i = 0;
     while(i < text.length()){
@@ -12,8 +12,9 @@ QVector<Token> tokenize(const QString& text){
 
         if(text.at(i).isDigit()){
             QString res;
-            while(text.at(i).isDigit() || text.at(i) == ','){
+            while(text.at(i).isDigit() || text.at(i) == '.'){
                 res += text.at(i);
+                i++;
             }
             double num = res.toDouble();
             tokens.push_back({Number, num, ' '});
@@ -21,6 +22,12 @@ QVector<Token> tokenize(const QString& text){
 
         if(text.at(i).isSymbol()){
             tokens.push_back({Operator, 0, text.at(i)});
+            i++;
         }
     }
+    return tokens;
+}
+
+double CalculatorEngine::evaluate(QVector<Token> tokens){
+
 }
