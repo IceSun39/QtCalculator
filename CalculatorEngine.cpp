@@ -12,7 +12,7 @@ QVector<Token> CalculatorEngine::tokenize(const QString& text){
 
         if(text.at(i).isDigit()){
             QString res;
-            while(text.at(i).isDigit() || text.at(i) == '.'){
+            while(i < text.length() && (text.at(i).isDigit() || text.at(i) == '.')){
                 res += text.at(i);
                 i++;
             }
@@ -28,6 +28,6 @@ QVector<Token> CalculatorEngine::tokenize(const QString& text){
     return tokens;
 }
 
-double CalculatorEngine::evaluate(QVector<Token> tokens){
+double CalculatorEngine::evaluate(const QVector<Token>& tokens){
 
 }

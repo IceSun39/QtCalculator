@@ -11,7 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
         ui->oneNum, ui->twoNum, ui->threeNum,
         ui->fourNum, ui->fiveNum, ui->sixNum,
         ui->sevenNum, ui->eightNum, ui->nineNum,
-        ui->zeroNum, ui->plus, ui->minus, ui->multiply, ui->division
+        ui->zeroNum, ui->plus, ui->minus, ui->multiply,
+        ui->division, ui->dot
     };
 
     for (QPushButton *button : printButtons) {

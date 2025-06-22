@@ -20,7 +20,7 @@ public:
 private:
     QVector<Token> tokenize(const QString& text);
 
-    double evaluate(QVector<Token> tokens);
+    double evaluate(const QVector<Token>& tokens);
 signals:
 };
 
