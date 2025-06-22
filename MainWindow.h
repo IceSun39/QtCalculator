@@ -19,7 +19,7 @@ public:
 
 private slots:
 
-    void onDigitClicked();
+    void onButtonClicked();
 
     void on_deleteButton_clicked();
 

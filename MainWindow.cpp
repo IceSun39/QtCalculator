@@ -15,10 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
     };
 
     for (QPushButton *button : printButtons) {
-        connect(button, &QPushButton::clicked, this, &MainWindow::onDigitClicked);
+        connect(button, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
     }
-
-
 }
 
 MainWindow::~MainWindow()
@@ -27,7 +25,7 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::onDigitClicked() {
+void MainWindow::onButtonClicked() {
     QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
     QString digitValue = clickedButton->text();
 
@@ -41,9 +39,6 @@ void MainWindow::onDigitClicked() {
         ui->display->setText(ui->display->text() + digitValue);
     }
 }
-
-
-
 
 void MainWindow::on_deleteButton_clicked()
 {
