@@ -2,7 +2,9 @@
 #define CALCULATORENGINE_H
 
 #include <QObject>
-
+#include <QVector>
+#include <QQueue>
+#include <QStack>
 
 enum TokenType { Number, Operator };
 
@@ -19,6 +21,10 @@ public:
     explicit CalculatorEngine(QObject *parent = nullptr);
 private:
     QVector<Token> tokenize(const QString& text);
+
+    int getPriority(QChar oper);
+
+    QQueue<Token> parsing(const QVector<Token>& tokens);
 
     double evaluate(const QVector<Token>& tokens);
 signals:
