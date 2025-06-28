@@ -31,21 +31,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::onButtonClicked() {
     QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
-    QString digitValue = clickedButton->text();
+    QString buttonValue = clickedButton->text();
+
+    if((lastEntered == '+' && buttonValue == '-') || (lastEntered == '-' && buttonValue == '+')){
+        QString text = ui->display->text();
+        text.chop(1);
+        ui->display->setText(text);
+    }
 
     // Додаємо цифру до дисплея коли він пустий
     if(displayIsEmpty){
         //знак ділення та множення не можуть бути першими знаками
-        if(digitValue != '/' && digitValue != '*'){
+        if(buttonValue != '/' && buttonValue != '*'){
             ui->display->clear();
-            ui->display->setText(ui->display->text() + digitValue);
+            ui->display->setText(ui->display->text() + buttonValue);
             displayIsEmpty = false;
         }
     }
     //додаємо цийру до дисплея коли не пустий
     else{
-        ui->display->setText(ui->display->text() + digitValue);
+        ui->display->setText(ui->display->text() + buttonValue);
     }
+    lastEntered = buttonValue;
 }
 
 void MainWindow::on_deleteButton_clicked()
@@ -86,6 +93,12 @@ void MainWindow::on_equal_clicked()
     ui->display->setText(QString::number(result));
     ui->display->setStyleSheet("color: white; font-size: 24px;");
     ui->display->setAlignment(Qt::AlignRight);
+
+}
+
+
+void MainWindow::on_changeSign_clicked()
+{
 
 }
 

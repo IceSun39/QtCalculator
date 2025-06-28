@@ -163,3 +163,13 @@ double CalculatorEngine::evaluate(QQueue<Token>& tokens) {
         return -1;
     }
 }
+
+//функція, що повертає останнє число
+double CalculatorEngine::getLastNumber(const QString& text){
+    int i = text.length();
+    QString res;
+    while(i >= 0 && (text.at(i).isNumber() || text.at(i) == '.')){
+        res.push_front(text.at(i++));
+    }
+    return res.toDouble();
+}

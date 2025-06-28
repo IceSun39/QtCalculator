@@ -22,6 +22,7 @@ public:
     static int getPriority(QChar oper);
     static QQueue<Token> parsing(const QVector<Token>& tokens);
     static double evaluate(QQueue<Token>& tokens);
+    static double getLastNumber(const QString& text);
 };
 
 #endif // CALCULATORENGINE_H
