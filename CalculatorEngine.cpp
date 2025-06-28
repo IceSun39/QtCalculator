@@ -40,7 +40,8 @@ QVector<Token> CalculatorEngine::tokenize(const QString& text){
 
 int CalculatorEngine::getPriority(QChar oper){
     if(oper == '+' || oper == '-') return 1;
-    else return 2;
+    else if(oper == '*' || oper == '/') return 2;
+    return -1;
 }
 
 QQueue<Token> CalculatorEngine::parsing(const QVector<Token>& tokens){
@@ -52,9 +53,21 @@ QQueue<Token> CalculatorEngine::parsing(const QVector<Token>& tokens){
             resQueue.push_back(*curr);
             curr++;
         }
+        else if(curr->type == LeftParen){
+            st.push(*curr);
+            curr++;
+        }
+        else if(curr->type == RightParen){
+            while(!st.isEmpty() && st.top().op != '('){
+                resQueue.push_back(st.top());
+                st.pop();
+            }
+            if(!st.isEmpty()) st.pop();//видаляємо '('
+            else qDebug() << "Error: unmatched closing parenthesis ')'";
+        }
         else{
             if(!st.isEmpty()){
-                while(getPriority(st.top().op) >= getPriority(curr->op)){
+                while(!st.isEmpty() && getPriority(st.top().op) >= getPriority(curr->op)){
                     resQueue.push_back(st.top());
                     st.pop();
                 }

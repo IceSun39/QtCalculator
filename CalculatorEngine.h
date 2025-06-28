@@ -5,8 +5,9 @@
 #include <QVector>
 #include <QQueue>
 #include <QStack>
+#include <QDebug>
 
-enum TokenType { Number, Operator };
+enum TokenType { Number, Operator, LeftParen, RightParen };
 
 struct Token {
     TokenType type;
