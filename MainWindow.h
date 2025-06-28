@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -24,6 +25,8 @@ private slots:
     void on_deleteButton_clicked();
 
     void on_deleteLine_clicked();
+
+    void on_equal_clicked();
 
 private:
     bool displayIsEmpty = true;

@@ -1,7 +1,7 @@
 #ifndef CALCULATORENGINE_H
 #define CALCULATORENGINE_H
 
-#include <QObject>
+#include <QString>
 #include <QVector>
 #include <QQueue>
 #include <QStack>
@@ -15,20 +15,13 @@ struct Token {
     QChar op;
 };
 
-class CalculatorEngine : public QObject
+class CalculatorEngine
 {
-    Q_OBJECT
 public:
-    explicit CalculatorEngine(QObject *parent = nullptr);
-private:
-    QVector<Token> tokenize(const QString& text);
-
-    int getPriority(QChar oper);
-
-    QQueue<Token> parsing(const QVector<Token>& tokens);
-
-    double evaluate(QQueue<Token>& tokens);
-signals:
+    static QVector<Token> tokenize(const QString& text);
+    static int getPriority(QChar oper);
+    static QQueue<Token> parsing(const QVector<Token>& tokens);
+    static double evaluate(QQueue<Token>& tokens);
 };
 
 #endif // CALCULATORENGINE_H

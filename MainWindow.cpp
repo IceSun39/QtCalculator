@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+#include "CalculatorEngine.h"
 #include "./ui_MainWindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -6,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->display->setStyleSheet("color: white; font-size: 24px;");
+    ui->display->setAlignment(Qt::AlignRight);
 
     QList<QPushButton*> printButtons = {
         ui->oneNum, ui->twoNum, ui->threeNum,
@@ -48,7 +51,7 @@ void MainWindow::on_deleteButton_clicked()
         text.chop(1); // видаляє останній символ
         ui->display->setText(text);
     }
-    if(ui->display->displayText().isEmpty()){
+    if(ui->display->text().isEmpty()){
         displayIsEmpty = true;
         ui->display->setText(ui->display->text() + '0');
     }
@@ -60,5 +63,25 @@ void MainWindow::on_deleteLine_clicked()
     ui->display->clear();
     displayIsEmpty = true;
     ui->display->setText(ui->display->text() + '0');
+}
+
+
+void MainWindow::on_equal_clicked()
+{
+    QString expr = ui->display->text();
+    QVector<Token> tokens = CalculatorEngine::tokenize(expr);
+    QQueue<Token> rnp = CalculatorEngine::parsing(tokens);
+    double result = CalculatorEngine::evaluate(rnp);
+
+    // Показуємо попередній вираз (меншим, сірим)
+    ui->upperDisplay->setText(expr);
+    ui->upperDisplay->setStyleSheet("color: gray; font-size: 14px;");
+    ui->upperDisplay->setAlignment(Qt::AlignRight);
+
+    // Показуємо результат більшим шрифтом
+    ui->display->setText(QString::number(result));
+    ui->display->setStyleSheet("color: white; font-size: 24px;");
+    ui->display->setAlignment(Qt::AlignRight);
+
 }
 
