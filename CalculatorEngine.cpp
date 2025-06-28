@@ -3,13 +3,23 @@
 // Токенізуємо вхідний текстовий рядок у список токенів
 QVector<Token> CalculatorEngine::tokenize(const QString& text) {
     QVector<Token> tokens;
+    int i = 0;
 
-    for (int i = 0; i < text.length(); ) {
-        if (text.at(i).isSpace()) {
-            ++i;
-            continue;
+    //обробка унарного мінуса
+    if(text.at(0) == '-'){
+        QString res = "-";
+        ++i;
+        while (i < text.length() && (text.at(i).isDigit() || text.at(i) == '.')) {
+            res += text.at(i++);
         }
+        double num = res.toDouble();
+        tokens.push_back({ Number, num, ' ' });
+    }
 
+    //обробка унарного плюса
+    if(text.at(0) == '+') i++;
+
+    for (; i < text.length(); ) {
         // Обробка числа (ціле або з крапкою)
         if (text.at(i).isDigit()) {
             QString res;
