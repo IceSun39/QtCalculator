@@ -33,12 +33,16 @@ void MainWindow::onButtonClicked() {
     QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
     QString digitValue = clickedButton->text();
 
-    // Додаємо цифру до дисплея
+    // Додаємо цифру до дисплея коли він пустий
     if(displayIsEmpty){
-        ui->display->clear();
-        ui->display->setText(ui->display->text() + digitValue);
-        displayIsEmpty = false;
+        //знак ділення та множення не можуть бути першими знаками
+        if(digitValue != '/' && digitValue != '*'){
+            ui->display->clear();
+            ui->display->setText(ui->display->text() + digitValue);
+            displayIsEmpty = false;
+        }
     }
+    //додаємо цийру до дисплея коли не пустий
     else{
         ui->display->setText(ui->display->text() + digitValue);
     }
