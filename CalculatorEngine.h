@@ -27,7 +27,7 @@ private:
 
     QQueue<Token> parsing(const QVector<Token>& tokens);
 
-    double evaluate(const QVector<Token>& tokens);
+    double evaluate(QQueue<Token>& tokens);
 signals:
 };
 

@@ -31,8 +31,18 @@ QVector<Token> CalculatorEngine::tokenize(const QString& text){
         }
 
         if(text.at(i).isSymbol()){
-            tokens.push_back({Operator, 0, text.at(i)});
-            i++;
+            if(text.at(i) == '('){
+                tokens.push_back({LeftParen, 0, text.at(i)});
+                i++;
+            }
+            else if(text.at(i) == ')'){
+                tokens.push_back({RightParen, 0, text.at(i)});
+                i++;
+            }
+            else{
+                tokens.push_back({Operator, 0, text.at(i)});
+                i++;
+            }
         }
     }
     return tokens;
@@ -88,6 +98,39 @@ QQueue<Token> CalculatorEngine::parsing(const QVector<Token>& tokens){
     return resQueue;
 }
 
-double CalculatorEngine::evaluate(const QVector<Token>& tokens){
+double CalculatorEngine::evaluate(QQueue<Token>& tokens){
+    QStack<double> st;
+    for (const auto& token : tokens) {
+        if (token.type == Number) {
+            st.push(token.value);
+        }
+        else if (token.type == Operator) {
+            if (st.size() < 2) {
+                qDebug() << "Error: not enough operands";
+                return -1;
+            }
 
+            double right = st.top(); st.pop(); // правий операнд
+            double left = st.top(); st.pop();  // лівий операнд
+
+            if (token.op == '+') st.push(left + right);
+            else if (token.op == '-') st.push(left - right);
+            else if (token.op == '*') st.push(left * right);
+            else if (token.op == '/') {
+                if (right != 0.0) st.push(left / right);
+                else {
+                    qDebug() << "Error: division by zero";
+                    return -1;
+                }
+            }
+        }
+    }
+
+    if (st.size() == 1) {
+        return st.top();
+    } else {
+        qDebug() << "Error: invalid expression";
+        return -1;
+    }
 }
+
