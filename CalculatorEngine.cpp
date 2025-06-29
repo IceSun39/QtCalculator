@@ -52,6 +52,22 @@ QVector<Token> CalculatorEngine::tokenize(const QString& text) {
             else if (ch == ')') {
                 tokens.push_back({ RightParen, 0, ch });
             }
+            else if(ch == '-'){
+                //якщо мінус на початку або ситуація типу 5*(-3)
+                if(i - 2 < 0 || text.at(i - 2) == '('){
+                    QString res;
+                    while (i < text.length() && (text.at(i).isDigit() || text.at(i) == '.')) {
+                        res += text.at(i++);
+                    }
+                    double num = res.toDouble();
+                    tokens.push_back({ Number, -num, ' ' });
+                    continue;
+                }
+                //якщо бінарний мінус
+                else{
+                    tokens.push_back({Operator, 0, '-'});
+                }
+            }
             else {
                 tokens.push_back({ Operator, 0, ch });
             }
