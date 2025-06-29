@@ -99,6 +99,31 @@ void MainWindow::on_equal_clicked()
 
 void MainWindow::on_changeSign_clicked()
 {
-
+    int lastIndex;
+    QString text = ui->display->text();
+    double number = CalculatorEngine::getLastNumber(text, lastIndex);
+    lastIndex = lastIndex == 0 ? 0 : --lastIndex;
+    if(text.at(lastIndex) == '+'){
+        text.replace(lastIndex, 1, "-");
+    }
+    else if(text.at(lastIndex) == '-'){
+        text.replace(lastIndex, 1, "+");
+    }
+    else if(QString("*/()").contains(text.at(lastIndex))){
+        text.insert(++lastIndex, "(-");
+        text.push_back(')');
+    }
+    else if(text.at(lastIndex).isNumber()){
+        if(lastIndex != 0){
+            text.insert(lastIndex, "(-");
+            text.push_back(')');
+        }
+        //якщо останній індекс 0, то у нас тільки одне число в рядку
+        else{
+            text.push_front("(-");
+            text.push_back(')');
+        }
+    }
+    ui->display->setText(text);
 }
 

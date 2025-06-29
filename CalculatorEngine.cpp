@@ -165,11 +165,12 @@ double CalculatorEngine::evaluate(QQueue<Token>& tokens) {
 }
 
 //функція, що повертає останнє число
-double CalculatorEngine::getLastNumber(const QString& text){
-    int i = text.length();
+double CalculatorEngine::getLastNumber(const QString& text, int& lastIndex){
+    int i = text.length() - 1;
     QString res;
-    while(i >= 0 && (text.at(i).isNumber() || text.at(i) == '.')){
-        res.push_front(text.at(i++));
+    while(i >= 0 && (text.at(i).isNumber() || text.at(i) == '.' || text.at(i) == ')')){
+        res.push_front(text.at(i--));
     }
+    lastIndex = ++i;
     return res.toDouble();
 }
