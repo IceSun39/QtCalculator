@@ -32,27 +32,55 @@ MainWindow::~MainWindow()
 void MainWindow::onButtonClicked() {
     QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
     QString buttonValue = clickedButton->text();
+    QString currentText = ui->display->text();
 
-    if((lastEntered == '+' && buttonValue == '-') || (lastEntered == '-' && buttonValue == '+')){
-        QString text = ui->display->text();
-        text.chop(1);
-        ui->display->setText(text);
-    }
+    // Якщо дисплей пустий
+    if (displayIsEmpty) {
+        // Першим не можуть бути * або /
+        if (buttonValue == "*" || buttonValue == "/") return;
 
-    // Додаємо цифру до дисплея коли він пустий
-    if(displayIsEmpty){
-        //знак ділення та множення не можуть бути першими знаками
-        if(buttonValue != '/' && buttonValue != '*'){
-            ui->display->clear();
-            ui->display->setText(ui->display->text() + buttonValue);
-            displayIsEmpty = false;
+        // Якщо це крапка — додаємо "0."
+        if (buttonValue == ".") {
+            ui->display->setText("0.");
+            lastEntered = "0.";
         }
+        else {
+            ui->display->setText(buttonValue);
+            lastEntered = buttonValue;
+        }
+        displayIsEmpty = false;
+        return;
     }
-    //додаємо цийру до дисплея коли не пустий
-    else{
-        ui->display->setText(ui->display->text() + buttonValue);
+
+    // Якщо останній введений — оператор
+    bool lastWasNumber;
+    lastEntered.toDouble(&lastWasNumber);
+
+    // Заборона двох операторів поспіль
+    if (!lastWasNumber && QString("+-*/").contains(buttonValue)) {
+        return;
     }
-    lastEntered = buttonValue;
+
+    // Заборона двох крапок в одному числі
+    if (lastWasNumber && buttonValue == "." && lastEntered.contains(".")) {
+        return;
+    }
+
+    // Обмеження довжини числа
+    if (lastWasNumber && lastEntered.length() >= 9 && QString("0123456789").contains(buttonValue)) {
+        return;
+    }
+
+    // Дозволене натискання — додаємо
+    ui->display->setText(currentText + buttonValue);
+
+    // Оновлюємо lastEntered
+    if (QString("+-*/()").contains(buttonValue)) {
+        lastEntered = buttonValue;
+    } else {
+        if(!lastWasNumber) lastEntered = buttonValue;
+        else lastEntered += buttonValue;
+    }
 }
 
 void MainWindow::on_deleteButton_clicked()
@@ -60,6 +88,7 @@ void MainWindow::on_deleteButton_clicked()
     if(!displayIsEmpty){
         QString text = ui->display->text();
         text.chop(1); // видаляє останній символ
+        lastEntered.chop(1);
         ui->display->setText(text);
     }
     if(ui->display->text().isEmpty()){
@@ -72,6 +101,7 @@ void MainWindow::on_deleteButton_clicked()
 void MainWindow::on_deleteLine_clicked()
 {
     ui->display->clear();
+    lastEntered.clear();
     displayIsEmpty = true;
     ui->display->setText(ui->display->text() + '0');
 }

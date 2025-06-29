@@ -5,17 +5,6 @@ QVector<Token> CalculatorEngine::tokenize(const QString& text) {
     QVector<Token> tokens;
     int i = 0;
 
-    //обробка унарного мінуса
-    if(text.at(0) == '-'){
-        QString res = "-";
-        ++i;
-        while (i < text.length() && (text.at(i).isDigit() || text.at(i) == '.')) {
-            res += text.at(i++);
-        }
-        double num = res.toDouble();
-        tokens.push_back({ Number, num, ' ' });
-    }
-
     //обробка унарного плюса
     if(text.at(0) == '+') i++;
 
@@ -52,6 +41,7 @@ QVector<Token> CalculatorEngine::tokenize(const QString& text) {
             else if (ch == ')') {
                 tokens.push_back({ RightParen, 0, ch });
             }
+            //обробка унарного та бінарного мінуса
             else if(ch == '-'){
                 //якщо мінус на початку або ситуація типу 5*(-3)
                 if(i - 2 < 0 || text.at(i - 2) == '('){
