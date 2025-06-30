@@ -320,28 +320,38 @@ QString CalculatorEngine::squareNumber(const QString &expression)
 
     return text;
 }
-
-QString CalculatorEngine::squareRootNumber(const QString &expression)
+QString CalculatorEngine::squareRootNumber(const QString &expression, int& posOfSqrt)
 {
-
     QString text = expression;
     int numberStartIndex;
     double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
 
-    //якщо число загорнуте в дужки
-    if(CalculatorEngine::isWrappedInParentheses(text, numberStartIndex)){
+    // Якщо число обгорнуте в дужки (наприклад (-6))
+    if (CalculatorEngine::isWrappedInParentheses(text, numberStartIndex)) {
         // Знаходимо позицію відкриваючої дужки
         numberStartIndex = text.lastIndexOf('(', numberStartIndex);
-        //якщо після відкритої дужки йде мінус, то помилка
-        if(text.at(numberStartIndex + 1) == '-') return "Error";
+
+        // Перевіряємо, чи число від'ємне
+        if (text.at(numberStartIndex + 1) == '-')
+            return "Error"; // Корінь із від’ємного числа не обробляється
     }
 
-    //шукаємо квадратний корінь
-    number = pow(number, 1.0 / 2.0);
+    // Обчислюємо квадратний корінь
+    number = std::sqrt(number);
+
+
+    //зберігаємо індекс куди вставити значок кореня
+    posOfSqrt = numberStartIndex;
+
+    // Видаляємо останнє число (з дужками, якщо були)
     text = CalculatorEngine::removeLastNumber(text, numberStartIndex);
+
+    // Додаємо результат
     text += QString::number(number, 'g', 15);
+
     return text;
 }
+
 
 QString CalculatorEngine::toggleLastNumberSign(const QString& expression)
 {

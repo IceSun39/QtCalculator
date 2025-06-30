@@ -26,7 +26,7 @@ public:
     static QString toggleLastNumberSign(const QString& expression);
     static QString reverseNumber(const QString& expression);
     static QString squareNumber(const QString& expression);
-    static QString squareRootNumber(const QString& expression);
+    static QString squareRootNumber(const QString& expression, int& posOfSqrt);
 private:
     static int getPriority(QChar oper);
     static bool isNegativeWrapped(const QString& text, int startIndex, double number);

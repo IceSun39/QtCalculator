@@ -9,6 +9,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->display->setStyleSheet("color: white; font-size: 24px;");
     ui->display->setAlignment(Qt::AlignRight);
+    ui->upperDisplay->setStyleSheet("color: gray; font-size: 14px;");
+    ui->upperDisplay->setAlignment(Qt::AlignRight);
+
 
     QList<QPushButton*> printButtons = {
         ui->oneNum, ui->twoNum, ui->threeNum,
@@ -124,13 +127,9 @@ void MainWindow::on_equal_clicked()
 
     // Показуємо попередній вираз (меншим, сірим)
     ui->upperDisplay->setText(expr);
-    ui->upperDisplay->setStyleSheet("color: gray; font-size: 14px;");
-    ui->upperDisplay->setAlignment(Qt::AlignRight);
 
     // Показуємо результат більшим шрифтом
     ui->display->setText(QString::number(result));
-    ui->display->setStyleSheet("color: white; font-size: 24px;");
-    ui->display->setAlignment(Qt::AlignRight);
 
 }
 
@@ -163,14 +162,20 @@ void MainWindow::on_squareNumber_clicked()
 {
     QString text = ui->display->text();
     text = CalculatorEngine::squareNumber(text);
+    ui->upperDisplay->setText(ui->display->text() + "^2");
     ui->display->setText(text);
+
 }
 
 
 void MainWindow::on_squareRoot_clicked()
 {
+    int posOfSqrt;
     QString text = ui->display->text();
-    text = CalculatorEngine::squareRootNumber(text);
+    QString oldText = text;
+    text = CalculatorEngine::squareRootNumber(text, posOfSqrt);
+    oldText.insert(posOfSqrt, "√");
+    ui->upperDisplay->setText(oldText);
     ui->display->setText(text);
 }
 
