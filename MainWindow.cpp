@@ -158,3 +158,11 @@ void MainWindow::on_reverseNumber_clicked()
     ui->display->setText(text);
 }
 
+
+void MainWindow::on_squareNumber_clicked()
+{
+    QString text = ui->display->text();
+    text = CalculatorEngine::squareNumber(text);
+    ui->display->setText(text);
+}
+

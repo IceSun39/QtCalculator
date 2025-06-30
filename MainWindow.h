@@ -34,6 +34,8 @@ private slots:
 
     void on_reverseNumber_clicked();
 
+    void on_squareNumber_clicked();
+
 private:
     bool displayIsEmpty = true;
     QString lastEntered;

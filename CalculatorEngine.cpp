@@ -297,6 +297,30 @@ QString CalculatorEngine::reverseNumber(const QString &expression)
     return text;
 }
 
+QString CalculatorEngine::squareNumber(const QString &expression)
+{
+    QString text = expression;
+    int numberStartIndex;
+    double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
+
+    //підносимо число до квадрата
+    number *= number;
+
+    //якщо число загорнуте в дужки
+    if(CalculatorEngine::isWrappedInParentheses(text, numberStartIndex)){
+        // Знаходимо позицію відкриваючої дужки
+        numberStartIndex = text.lastIndexOf('(', numberStartIndex);
+    }
+
+    // Видаляємо його з виразу
+    text = CalculatorEngine::removeLastNumber(text, numberStartIndex);
+
+    // Додаємо до виразу
+    text += QString::number(number, 'g', 15);
+
+    return text;
+}
+
 QString CalculatorEngine::toggleLastNumberSign(const QString& expression)
 {
     QString text = expression;
