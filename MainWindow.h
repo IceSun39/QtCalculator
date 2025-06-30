@@ -30,6 +30,10 @@ private slots:
 
     void on_changeSign_clicked();
 
+    void on_deleteAll_clicked();
+
+    void on_reverseNumber_clicked();
+
 private:
     bool displayIsEmpty = true;
     QString lastEntered;

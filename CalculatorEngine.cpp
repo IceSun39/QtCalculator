@@ -170,13 +170,93 @@ double CalculatorEngine::evaluate(QQueue<Token>& tokens) {
     }
 }
 
-//функція, що повертає останнє число
-double CalculatorEngine::getLastNumber(const QString& text, int& lastIndex){
-    int i = text.length() - 1;
-    QString res;
-    while(i >= 0 && (text.at(i).isNumber() || text.at(i) == '.' || text.at(i) == ')')){
-        res.push_front(text.at(i--));
+// Повертає останнє число у тексті виразу та індекс першого символу цього числа
+double CalculatorEngine::getLastNumber(const QString& text, int& numberStartIndex)
+{
+    if (text.isEmpty()) {
+        numberStartIndex = 0;
+        return 0.0;
     }
-    lastIndex = ++i;
-    return res.toDouble();
+
+    int i = text.length() - 1;
+    QString numberStr;
+
+    // Ігноруємо закриваючі дужки у випадку обгорнутого числа: (-12)
+    if (text.at(i) == ')') {
+        int openParenIndex = text.lastIndexOf("(-", i);
+        if (openParenIndex != -1) {
+            numberStr = text.mid(openParenIndex + 2, i - openParenIndex - 2); // витягаємо число між дужками
+            numberStartIndex = openParenIndex;
+            return numberStr.toDouble();
+        }
+    }
+
+    // Проходимо з кінця до першого символу числа
+    while (i >= 0 && (text.at(i).isDigit() || text.at(i) == '.')) {
+        numberStr.prepend(text.at(i));
+        i--;
+    }
+
+    // Запам'ятовуємо індекс першого символу числа
+    numberStartIndex = i + 1;
+
+    // Пробуємо перетворити в число
+    return numberStr.toDouble();
 }
+
+
+bool CalculatorEngine::isNegativeWrapped(const QString& text, int startIndex, double number)
+{
+    // Генеруємо рядок типу "(-12)" або "(-12.5)"
+    QString wrapped = "(-" + QString::number(number) + ")";
+
+    // Порівнюємо частину тексту з цією обгорткою
+    return text.mid(startIndex, wrapped.length()) == wrapped;
+}
+
+QString CalculatorEngine::toggleLastNumberSign(const QString& expression)
+{
+    QString text = expression;
+    int lastIndex;
+
+    // Отримуємо останнє число у виразі
+    double number = getLastNumber(text, lastIndex);
+    int numberStart = lastIndex;
+
+    // Перевіряємо, чи це число вже записане у вигляді (-...)
+    if (isNegativeWrapped(text, numberStart, number)) {
+        // Якщо так — прибираємо "(-" і ")"
+        text.remove(numberStart, 2); // видаляємо "(-"
+        text.remove(text.indexOf(")", numberStart), 1); // видаляємо ")"
+        return text;
+    }
+
+    // Позиція символу перед числом
+    int signPos = numberStart > 0 ? numberStart - 1 : 0;
+
+    // Якщо перед числом стоїть + або -
+    if (text.at(signPos) == '+') {
+        text.replace(signPos, 1, "-");
+    }
+    else if (text.at(signPos) == '-') {
+        text.replace(signPos, 1, "+");
+    }
+    // Якщо перед числом * або /
+    else if (QString("*/").contains(text.at(signPos))) {
+        text.insert(numberStart, "(-");
+        text.append(")");
+    }
+    // Якщо перед числом нічого або це просто окреме число
+    else if (text.at(signPos).isDigit()) {
+        if (numberStart != 0) {
+            text.insert(numberStart, "(-");
+            text.append(")");
+        } else {
+            text.prepend("(-");
+            text.append(")");
+        }
+    }
+
+    return text;
+}
+

@@ -134,40 +134,32 @@ void MainWindow::on_equal_clicked()
 
 }
 
-
 void MainWindow::on_changeSign_clicked()
+{
+    QString text = ui->display->text();
+    text = CalculatorEngine::toggleLastNumberSign(text);
+    ui->display->setText(text);
+}
+
+void MainWindow::on_deleteAll_clicked()
+{
+    ui->display->clear();
+    ui->upperDisplay->clear();
+    lastEntered.clear();
+    displayIsEmpty = true;
+    ui->display->setText(ui->display->text() + '0');
+}
+
+
+void MainWindow::on_reverseNumber_clicked()
 {
     int lastIndex;
     QString text = ui->display->text();
     double number = CalculatorEngine::getLastNumber(text, lastIndex);
-    lastIndex = lastIndex == 0 ? 0 : --lastIndex;
-    if(text.at(lastIndex) == '+'){
-        text.replace(lastIndex, 1, "-");
-    }
-    else if(text.at(lastIndex) == '-'){
-        text.replace(lastIndex, 1, "+");
-    }
-    else if(QString("*/()").contains(text.at(lastIndex))){
-        text.insert(++lastIndex, "(-");
-        text.push_back(')');
-    }
-    else if(text.at(lastIndex).isNumber()){
-        if(lastIndex != 0){
-            text.insert(lastIndex, "(-");
-            text.push_back(')');
-        }
-        //якщо останній індекс 0, то у нас тільки одне число в рядку
-        else{
-            text.push_front("(-");
-            text.push_back(')');
-        }
-    }
+    number = 1 / number;
+    QString toAdd = QString::number(number);
+    text.erase(text.cbegin() + lastIndex, text.cend());
+    text += toAdd;
     ui->display->setText(text);
-}
-
-
-void MainWindow::on_deleteAll_clicked()
-{
-
 }
 

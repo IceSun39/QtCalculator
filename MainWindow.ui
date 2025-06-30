@@ -300,10 +300,7 @@
      </rect>
     </property>
     <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset theme="QIcon::ThemeIcon::EditDelete"/>
+     <string>C</string>
     </property>
    </widget>
    <widget class="QPushButton" name="squareNumber">
