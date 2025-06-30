@@ -166,3 +166,11 @@ void MainWindow::on_squareNumber_clicked()
     ui->display->setText(text);
 }
 
+
+void MainWindow::on_squareRoot_clicked()
+{
+    QString text = ui->display->text();
+    text = CalculatorEngine::squareRootNumber(text);
+    ui->display->setText(text);
+}
+

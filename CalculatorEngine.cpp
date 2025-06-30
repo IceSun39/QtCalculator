@@ -321,6 +321,28 @@ QString CalculatorEngine::squareNumber(const QString &expression)
     return text;
 }
 
+QString CalculatorEngine::squareRootNumber(const QString &expression)
+{
+
+    QString text = expression;
+    int numberStartIndex;
+    double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
+
+    //якщо число загорнуте в дужки
+    if(CalculatorEngine::isWrappedInParentheses(text, numberStartIndex)){
+        // Знаходимо позицію відкриваючої дужки
+        numberStartIndex = text.lastIndexOf('(', numberStartIndex);
+        //якщо після відкритої дужки йде мінус, то помилка
+        if(text.at(numberStartIndex + 1) == '-') return "Error";
+    }
+
+    //шукаємо квадратний корінь
+    number = pow(number, 1.0 / 2.0);
+    text = CalculatorEngine::removeLastNumber(text, numberStartIndex);
+    text += QString::number(number, 'g', 15);
+    return text;
+}
+
 QString CalculatorEngine::toggleLastNumberSign(const QString& expression)
 {
     QString text = expression;

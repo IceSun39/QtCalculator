@@ -36,6 +36,8 @@ private slots:
 
     void on_squareNumber_clicked();
 
+    void on_squareRoot_clicked();
+
 private:
     bool displayIsEmpty = true;
     QString lastEntered;
