@@ -186,7 +186,7 @@ double CalculatorEngine::getLastNumber(const QString& text, int& numberStartInde
         int openParenIndex = text.lastIndexOf("(-", i);
         if (openParenIndex != -1) {
             numberStr = text.mid(openParenIndex + 2, i - openParenIndex - 2); // витягаємо число між дужками
-            numberStartIndex = openParenIndex;
+            numberStartIndex = openParenIndex + 2;
             return numberStr.toDouble();
         }
     }
@@ -204,7 +204,6 @@ double CalculatorEngine::getLastNumber(const QString& text, int& numberStartInde
     return numberStr.toDouble();
 }
 
-
 bool CalculatorEngine::isNegativeWrapped(const QString& text, int startIndex, double number)
 {
     // Генеруємо рядок типу "(-12)" або "(-12.5)"
@@ -212,6 +211,90 @@ bool CalculatorEngine::isNegativeWrapped(const QString& text, int startIndex, do
 
     // Порівнюємо частину тексту з цією обгорткою
     return text.mid(startIndex, wrapped.length()) == wrapped;
+}
+
+QString CalculatorEngine::wrapAsReciprocal(double number)
+{
+    return "1/" + QString::number(number, 'g', 15);
+}
+
+QString CalculatorEngine::wrapAsReciprocal(const QString &expression)
+{
+    return "1/" + expression;
+}
+
+QString CalculatorEngine::removeLastNumber(const QString &text, int startIndex)
+{
+    QString expr = text;
+    expr.chop(expr.length() - startIndex);
+    return expr;
+}
+
+bool CalculatorEngine::isWrappedInParentheses(const QString& text, int numberStartIndex)
+{
+    //якщо розмір менше двох, то дужок ніяк там бути не може
+    if (text.isEmpty() || numberStartIndex < 2)
+        return false;
+
+    //якщо нема ), то дужки не закриті
+    int closeParenIndex = text.indexOf(')', numberStartIndex);
+    if (closeParenIndex == -1)
+        return false;
+
+    // Шукаємо відкриваючу дужку лівіше
+    int openParenIndex = text.lastIndexOf('(', numberStartIndex);
+    if (openParenIndex == -1)
+        return false;
+
+    // Витягуємо рядок усередині дужок
+    QString inside = text.mid(openParenIndex + 1, closeParenIndex - openParenIndex - 1);
+
+    // Перевіряємо, чи це дійсно число (може з мінусом)
+    bool ok = false;
+    inside.toDouble(&ok);
+    return ok;
+}
+
+QString CalculatorEngine::reverseNumber(const QString &expression)
+{
+    // Копіюємо вхідний вираз, щоб не змінювати оригінальний
+    QString text = expression;
+
+    // Знаходимо останнє число у виразі та індекс, з якого воно починається
+    int numberStartIndex;
+    double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
+
+    // Отримуємо символ перед числом, якщо такий існує
+    QChar prevChar = numberStartIndex > 0 ? text.at(numberStartIndex - 1) : QChar();
+
+    // Випадок 1: якщо останнє число вже загорнуте в дужки (наприклад: (6), (-3.2), тощо)
+    if (CalculatorEngine::isWrappedInParentheses(text, numberStartIndex)) {
+        // Знаходимо позицію відкриваючої та закриваючої дужки
+        int openIndex = text.lastIndexOf('(', numberStartIndex);
+        int closeIndex = text.indexOf(')', numberStartIndex);
+
+        // Витягуємо повністю вираз у дужках (наприклад: "(6)", "(-3.2)")
+        QString wrapped = text.mid(openIndex, closeIndex - openIndex + 1);
+
+        // Видаляємо його з виразу
+        text = CalculatorEngine::removeLastNumber(text, openIndex);
+
+        // Додаємо до виразу обернене значення: 1/(...)
+        text += CalculatorEngine::wrapAsReciprocal(wrapped);
+    }
+    // Випадок 2: перед числом стоїть оператор (+, -, *, /) — загортаємо обернення у дужки
+    else if (QString("+-*/").contains(prevChar)) {
+        text = removeLastNumber(text, numberStartIndex);
+        text += '(' + wrapAsReciprocal(number) + ')';
+    }
+    // Випадок 3: просто число (без знаку перед ним) — додаємо обернене як є
+    else {
+        text = removeLastNumber(text, numberStartIndex);
+        text += wrapAsReciprocal(number);
+    }
+
+    // Повертаємо оновлений вираз
+    return text;
 }
 
 QString CalculatorEngine::toggleLastNumberSign(const QString& expression)

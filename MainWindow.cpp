@@ -153,13 +153,8 @@ void MainWindow::on_deleteAll_clicked()
 
 void MainWindow::on_reverseNumber_clicked()
 {
-    int lastIndex;
     QString text = ui->display->text();
-    double number = CalculatorEngine::getLastNumber(text, lastIndex);
-    number = 1 / number;
-    QString toAdd = QString::number(number);
-    text.erase(text.cbegin() + lastIndex, text.cend());
-    text += toAdd;
+    text = CalculatorEngine::reverseNumber(text);
     ui->display->setText(text);
 }
 
