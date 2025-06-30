@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-//треба зробити щоб число могло мати тільки одну точку через запам'ятосування останнього веденого та обмеження в довжині числа
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

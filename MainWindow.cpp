@@ -56,10 +56,18 @@ void MainWindow::onButtonClicked() {
     bool lastWasNumber;
     lastEntered.toDouble(&lastWasNumber);
 
-    // Заборона двох операторів поспіль
-    if (!lastWasNumber && QString("+-*/").contains(buttonValue)) {
+    //заміна операторів
+    if(QString("+-*/").contains(buttonValue) && QString("+-*/").contains(lastEntered)){
+        currentText.chop(1);
+        currentText += buttonValue;
+        ui->display->setText(currentText);
         return;
     }
+
+    // Заборона двох операторів поспіль
+    //if (!lastWasNumber && QString("+-*/").contains(buttonValue)) {
+    //    return;
+    //}
 
     // Заборона двох крапок в одному числі
     if (lastWasNumber && buttonValue == "." && lastEntered.contains(".")) {
@@ -155,5 +163,11 @@ void MainWindow::on_changeSign_clicked()
         }
     }
     ui->display->setText(text);
+}
+
+
+void MainWindow::on_deleteAll_clicked()
+{
+
 }
 
