@@ -352,6 +352,31 @@ QString CalculatorEngine::squareRootNumber(const QString &expression, int& posOf
     return text;
 }
 
+QString CalculatorEngine::getPercent(const QString &expression)
+{
+    QString text = expression;
+    int lastIndex;
+
+    // Отримуємо останнє число у виразі
+    double number = getLastNumber(text, lastIndex);
+    int numberStart = lastIndex;
+
+    //беремо з нього відсоток
+    number /= 100;
+    //якщо число в дужках
+    if(CalculatorEngine::isWrappedInParentheses(text, lastIndex)){
+        text = CalculatorEngine::removeLastNumber(text, numberStart);
+        text = text + QString::number(number, 'g', 15) + ')';
+    }
+    //якщо число без дужок
+    else{
+        text = CalculatorEngine::removeLastNumber(text, lastIndex);
+        text += QString::number(number, 'g', 15);
+    }
+
+    return text;
+}
+
 
 QString CalculatorEngine::toggleLastNumberSign(const QString& expression)
 {

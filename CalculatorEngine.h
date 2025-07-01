@@ -27,6 +27,7 @@ public:
     static QString reverseNumber(const QString& expression);
     static QString squareNumber(const QString& expression);
     static QString squareRootNumber(const QString& expression, int& posOfSqrt);
+    static QString getPercent(const QString& expression);
 private:
     static int getPriority(QChar oper);
     static bool isNegativeWrapped(const QString& text, int startIndex, double number);

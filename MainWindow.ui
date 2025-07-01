@@ -7,406 +7,881 @@
     <x>0</x>
     <y>0</y>
     <width>322</width>
-    <height>553</height>
+    <height>551</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="fourNum">
+   <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>340</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>4</string>
-    </property>
-    <property name="shortcut">
-     <string>4</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="fiveNum">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>340</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>5</string>
-    </property>
-    <property name="shortcut">
-     <string>5</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="sixNum">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>340</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>6</string>
-    </property>
-    <property name="shortcut">
-     <string>6</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="nineNum">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>410</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>9</string>
-    </property>
-    <property name="shortcut">
-     <string>9</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="eightNum">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>410</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>8</string>
-    </property>
-    <property name="shortcut">
-     <string>8</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="sevenNum">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>410</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>7</string>
-    </property>
-    <property name="shortcut">
-     <string>7</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="dot">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>480</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>.</string>
-    </property>
-    <property name="shortcut">
-     <string>.</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="zeroNum">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>480</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-    <property name="shortcut">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="changeSign">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>480</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>+/-</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="equal">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>480</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>=</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="plus">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>410</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>+</string>
-    </property>
-    <property name="shortcut">
-     <string>+</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="minus">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>340</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>-</string>
-    </property>
-    <property name="shortcut">
-     <string>-</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="threeNum">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>270</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>3</string>
-    </property>
-    <property name="shortcut">
-     <string>3</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="twoNum">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>270</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>2</string>
-    </property>
-    <property name="shortcut">
-     <string>2</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="oneNum">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>270</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>1</string>
-    </property>
-    <property name="shortcut">
-     <string>1</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="multiply">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>270</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>*</string>
-    </property>
-    <property name="shortcut">
-     <string>*</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="squareRoot">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>200</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>sqrt</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="getPercent">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>130</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>%</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="deleteLine">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>130</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>C</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="squareNumber">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>200</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>sqr</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="reverseNumber">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>200</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>1/x</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="deleteButton">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>130</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset theme="QIcon::ThemeIcon::EditUndo"/>
-    </property>
-    <property name="shortcut">
-     <string>Backspace</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="division">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>200</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>/</string>
-    </property>
-    <property name="shortcut">
-     <string>/</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="deleteAll">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>130</y>
-      <width>81</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>CE</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="display">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>80</y>
+      <y>0</y>
       <width>321</width>
-      <height>51</height>
+      <height>551</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
+    <property name="currentIndex">
+     <number>0</number>
     </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="upperDisplay">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>40</y>
-      <width>321</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
+    <widget class="QWidget" name="page">
+     <widget class="QWidget" name="widgetEngineering" native="true">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>321</width>
+        <height>551</height>
+       </rect>
+      </property>
+      <widget class="QPushButton" name="zeroNum1_2">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>480</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="shortcut">
+        <string>0</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="equal1_2">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>480</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>=</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="nineNum1_2">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>410</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>9</string>
+       </property>
+       <property name="shortcut">
+        <string>9</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="sixNum1_2">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>340</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>6</string>
+       </property>
+       <property name="shortcut">
+        <string>6</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="squareNumber1_2">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>200</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>sqr</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="deleteButton1_2">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>130</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="QIcon::ThemeIcon::EditUndo"/>
+       </property>
+       <property name="shortcut">
+        <string>Backspace</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="plus1_2">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>410</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+       <property name="shortcut">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="minus1_2">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>340</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>-</string>
+       </property>
+       <property name="shortcut">
+        <string>-</string>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="toolButtonMenu1_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>10</y>
+         <width>25</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="QIcon::ThemeIcon::FormatJustifyCenter"/>
+       </property>
+       <property name="popupMode">
+        <enum>QToolButton::ToolButtonPopupMode::InstantPopup</enum>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="getPercent1_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>130</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>%</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="deleteAll1_2">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>130</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>CE</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="twoNum1_2">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>270</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>2</string>
+       </property>
+       <property name="shortcut">
+        <string>2</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="reverseNumber1_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>200</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>1/x</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="squareRoot1_2">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>200</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>sqrt</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="fourNum1_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>340</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>4</string>
+       </property>
+       <property name="shortcut">
+        <string>4</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="deleteLine1_2">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>130</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>C</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="fiveNum1_2">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>340</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>5</string>
+       </property>
+       <property name="shortcut">
+        <string>5</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="eightNum1_2">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>410</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>8</string>
+       </property>
+       <property name="shortcut">
+        <string>8</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="multiply1_2">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>270</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>*</string>
+       </property>
+       <property name="shortcut">
+        <string>*</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="division1_2">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>200</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>/</string>
+       </property>
+       <property name="shortcut">
+        <string>/</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="upperDisplay1_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>40</y>
+         <width>321</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="display1_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>70</y>
+         <width>321</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="sevenNum1_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>410</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>7</string>
+       </property>
+       <property name="shortcut">
+        <string>7</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="oneNum1_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>270</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>1</string>
+       </property>
+       <property name="shortcut">
+        <string>1</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="threeNum1_2">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>270</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>3</string>
+       </property>
+       <property name="shortcut">
+        <string>3</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="dot1_2">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>480</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>.</string>
+       </property>
+       <property name="shortcut">
+        <string>.</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="changeSign1_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>480</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ingeneer</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2">
+     <widget class="QWidget" name="widgetStandart" native="true">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>321</width>
+        <height>551</height>
+       </rect>
+      </property>
+      <widget class="QPushButton" name="reverseNumber1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>200</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>1/x</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="deleteButton1">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>130</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="QIcon::ThemeIcon::EditUndo"/>
+       </property>
+       <property name="shortcut">
+        <string>Backspace</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="sixNum1">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>340</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>6</string>
+       </property>
+       <property name="shortcut">
+        <string>6</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="squareNumber1">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>200</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>sqr</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="deleteAll1">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>130</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>CE</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="squareRoot1">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>200</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>sqrt</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="eightNum1">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>410</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>8</string>
+       </property>
+       <property name="shortcut">
+        <string>8</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="getPercent1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>130</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>%</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="upperDisplay1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>40</y>
+         <width>321</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="display1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>70</y>
+         <width>321</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="equal1">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>480</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>=</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="twoNum1">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>270</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>2</string>
+       </property>
+       <property name="shortcut">
+        <string>2</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="minus1">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>340</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>-</string>
+       </property>
+       <property name="shortcut">
+        <string>-</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="threeNum1">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>270</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>3</string>
+       </property>
+       <property name="shortcut">
+        <string>3</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="fourNum1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>340</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>4</string>
+       </property>
+       <property name="shortcut">
+        <string>4</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="deleteLine1">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>130</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>C</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="plus1">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>410</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+       <property name="shortcut">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="dot1">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>480</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>.</string>
+       </property>
+       <property name="shortcut">
+        <string>.</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="oneNum1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>270</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>1</string>
+       </property>
+       <property name="shortcut">
+        <string>1</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="sevenNum1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>410</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>7</string>
+       </property>
+       <property name="shortcut">
+        <string>7</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="fiveNum1">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>340</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>5</string>
+       </property>
+       <property name="shortcut">
+        <string>5</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="nineNum1">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>410</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>9</string>
+       </property>
+       <property name="shortcut">
+        <string>9</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="division1">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>200</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>/</string>
+       </property>
+       <property name="shortcut">
+        <string>/</string>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="toolButtonMenu1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>10</y>
+         <width>25</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="QIcon::ThemeIcon::FormatJustifyCenter"/>
+       </property>
+       <property name="popupMode">
+        <enum>QToolButton::ToolButtonPopupMode::InstantPopup</enum>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="changeSign1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>480</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>+/-</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="multiply1">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>270</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>*</string>
+       </property>
+       <property name="shortcut">
+        <string>*</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="zeroNum1">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>480</y>
+         <width>81</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="shortcut">
+        <string>0</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
    </widget>
   </widget>
  </widget>

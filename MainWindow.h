@@ -22,21 +22,28 @@ private slots:
 
     void onButtonClicked();
 
-    void on_deleteButton_clicked();
+    void on_deleteButton1_clicked();
 
-    void on_deleteLine_clicked();
+    void on_deleteLine1_clicked();
 
-    void on_equal_clicked();
+    void on_equal1_clicked();
 
-    void on_changeSign_clicked();
+    void on_changeSign1_clicked();
 
-    void on_deleteAll_clicked();
+    void on_deleteAll1_clicked();
 
-    void on_reverseNumber_clicked();
+    void on_reverseNumber1_clicked();
 
-    void on_squareNumber_clicked();
+    void on_squareNumber1_clicked();
 
-    void on_squareRoot_clicked();
+    void on_squareRoot1_clicked();
+
+    void on_getPercent1_clicked();
+
+    void setStandardMode();
+
+    void setEngineeringMode();
+
 
 private:
     bool displayIsEmpty = true;
