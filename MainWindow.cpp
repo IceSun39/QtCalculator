@@ -29,78 +29,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
 void MainWindow::setStandardMode()
 {
-    // Перехід на сторінку звичайного режиму (індекс 1)
-    ui->stackedWidget->setCurrentIndex(1);
-
-    // Присвоєння вказівників на віджети звичайного режиму
-    QWidget* page = ui->stackedWidget->currentWidget();
-    currentDisplay = page->findChild<QLabel*>("display1");
-    currentUpperDisplay = page->findChild<QLabel*>("upperDisplay1");
-
-    currentDisplay->setStyleSheet("color: white; font-size: 24px;");
-    currentDisplay->setAlignment(Qt::AlignRight);
-    currentUpperDisplay->setStyleSheet("color: gray; font-size: 14px;");
-    currentUpperDisplay->setAlignment(Qt::AlignRight);
-
-    // Цифрові кнопки
-    currentDigitButtons = {
-        page->findChild<QPushButton*>("oneNum1"),
-        page->findChild<QPushButton*>("twoNum1"),
-        page->findChild<QPushButton*>("threeNum1"),
-        page->findChild<QPushButton*>("fourNum1"),
-        page->findChild<QPushButton*>("fiveNum1"),
-        page->findChild<QPushButton*>("sixNum1"),
-        page->findChild<QPushButton*>("sevenNum1"),
-        page->findChild<QPushButton*>("eightNum1"),
-        page->findChild<QPushButton*>("nineNum1"),
-        page->findChild<QPushButton*>("zeroNum1")
-    };
-    // Операторські кнопки
-    currentOperatorButtons = {
-        page->findChild<QPushButton*>("plus1"),
-        page->findChild<QPushButton*>("minus1"),
-        page->findChild<QPushButton*>("multiply1"),
-        page->findChild<QPushButton*>("division1"),
-        page->findChild<QPushButton*>("dot1")
-    };
-
-    // Інші функціональні кнопки
-    currentEqualButton = page->findChild<QPushButton*>("equal1");
-    currentDeleteButton = page->findChild<QPushButton*>("deleteButton1");
-    currentDeleteLineButton = page->findChild<QPushButton*>("deleteLine1");
-    currentDeleteAllButton = page->findChild<QPushButton*>("deleteAll1");
-    currentChangeSignButton = page->findChild<QPushButton*>("changeSign1");
-    currentReverseButton = page->findChild<QPushButton*>("reverseNumber1");
-    currentSquareButton = page->findChild<QPushButton*>("squareNumber1");
-    currentSqrtButton = page->findChild<QPushButton*>("squareRoot1");
-    currentPercentButton = page->findChild<QPushButton*>("getPercent1");
-
-    // Підключення слотів
-    for (auto *btn : currentDigitButtons)
-        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
-    //підключення операторів
-    for (auto *btn : currentOperatorButtons)
-        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
-    //підлючення функціональних кнопок
-    connect(currentEqualButton, &QPushButton::clicked, this, &MainWindow::on_equal_clicked);
-    connect(currentDeleteButton, &QPushButton::clicked, this, &MainWindow::on_deleteButton_clicked);
-    connect(currentDeleteLineButton, &QPushButton::clicked, this, &MainWindow::on_deleteLine_clicked);
-    connect(currentDeleteAllButton, &QPushButton::clicked, this, &MainWindow::on_deleteAll_clicked);
-    connect(currentChangeSignButton, &QPushButton::clicked, this, &MainWindow::on_changeSign_clicked);
-    connect(currentReverseButton, &QPushButton::clicked, this, &MainWindow::on_reverseNumber_clicked);
-    connect(currentSquareButton, &QPushButton::clicked, this, &MainWindow::on_squareNumber_clicked);
-    connect(currentSqrtButton, &QPushButton::clicked, this, &MainWindow::on_squareRoot_clicked);
-    connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked);
-}
-
-void MainWindow::setEngineeringMode()
-{
-    // Перехід на сторінку інженерного режиму (індекс 0)
+    // Перехід на сторінку стандартного режиму (індекс 0)
     ui->stackedWidget->setCurrentIndex(0);
 
-    // Присвоєння вказівників на віджети інженерного режиму
+    // Присвоєння вказівників на віджети стандартного режиму
     QWidget* page = ui->stackedWidget->currentWidget();
     currentDisplay = page->findChild<QLabel*>("display1_2");
     currentUpperDisplay = page->findChild<QLabel*>("upperDisplay1_2");
@@ -161,6 +96,71 @@ void MainWindow::setEngineeringMode()
     connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked);
 }
 
+void MainWindow::setEngineeringMode()
+{
+    // Перехід на сторінку інженерного режиму (індекс 1)
+    ui->stackedWidget->setCurrentIndex(1);
+
+    // Присвоєння вказівників на віджети інженерного режиму
+    QWidget* page = ui->stackedWidget->currentWidget();
+    currentDisplay = page->findChild<QLabel*>("display1");
+    currentUpperDisplay = page->findChild<QLabel*>("upperDisplay1");
+
+    currentDisplay->setStyleSheet("color: white; font-size: 24px;");
+    currentDisplay->setAlignment(Qt::AlignRight);
+    currentUpperDisplay->setStyleSheet("color: gray; font-size: 14px;");
+    currentUpperDisplay->setAlignment(Qt::AlignRight);
+
+    // Цифрові кнопки
+    currentDigitButtons = {
+        page->findChild<QPushButton*>("oneNum1"),
+        page->findChild<QPushButton*>("twoNum1"),
+        page->findChild<QPushButton*>("threeNum1"),
+        page->findChild<QPushButton*>("fourNum1"),
+        page->findChild<QPushButton*>("fiveNum1"),
+        page->findChild<QPushButton*>("sixNum1"),
+        page->findChild<QPushButton*>("sevenNum1"),
+        page->findChild<QPushButton*>("eightNum1"),
+        page->findChild<QPushButton*>("nineNum1"),
+        page->findChild<QPushButton*>("zeroNum1")
+    };
+    // Операторські кнопки
+    currentOperatorButtons = {
+        page->findChild<QPushButton*>("plus1"),
+        page->findChild<QPushButton*>("minus1"),
+        page->findChild<QPushButton*>("multiply1"),
+        page->findChild<QPushButton*>("division1"),
+        page->findChild<QPushButton*>("dot1")
+    };
+
+    // Інші функціональні кнопки
+    currentEqualButton = page->findChild<QPushButton*>("equal1");
+    currentDeleteButton = page->findChild<QPushButton*>("deleteButton1");
+    currentDeleteLineButton = page->findChild<QPushButton*>("deleteLine1");
+    currentDeleteAllButton = page->findChild<QPushButton*>("deleteAll1");
+    currentChangeSignButton = page->findChild<QPushButton*>("changeSign1");
+    currentReverseButton = page->findChild<QPushButton*>("reverseNumber1");
+    currentSquareButton = page->findChild<QPushButton*>("squareNumber1");
+    currentSqrtButton = page->findChild<QPushButton*>("squareRoot1");
+    currentPercentButton = page->findChild<QPushButton*>("getPercent1");
+
+    // Підключення слотів
+    for (auto *btn : currentDigitButtons)
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
+    //підключення операторів
+    for (auto *btn : currentOperatorButtons)
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
+    //підлючення функціональних кнопок
+    connect(currentEqualButton, &QPushButton::clicked, this, &MainWindow::on_equal_clicked);
+    connect(currentDeleteButton, &QPushButton::clicked, this, &MainWindow::on_deleteButton_clicked);
+    connect(currentDeleteLineButton, &QPushButton::clicked, this, &MainWindow::on_deleteLine_clicked);
+    connect(currentDeleteAllButton, &QPushButton::clicked, this, &MainWindow::on_deleteAll_clicked);
+    connect(currentChangeSignButton, &QPushButton::clicked, this, &MainWindow::on_changeSign_clicked);
+    connect(currentReverseButton, &QPushButton::clicked, this, &MainWindow::on_reverseNumber_clicked);
+    connect(currentSquareButton, &QPushButton::clicked, this, &MainWindow::on_squareNumber_clicked);
+    connect(currentSqrtButton, &QPushButton::clicked, this, &MainWindow::on_squareRoot_clicked);
+    connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked);
+}
 
 void MainWindow::onButtonClicked()
 {
