@@ -1,43 +1,27 @@
 #include "MainWindow.h"
+#include "ui_MainWindow.h"
 #include "CalculatorEngine.h"
-#include "./ui_MainWindow.h"
 #include <QMenu>
+#include <QLabel>
+#include <QPushButton>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->display1->setStyleSheet("color: white; font-size: 24px;");
-    ui->display1->setAlignment(Qt::AlignRight);
-    ui->upperDisplay1->setStyleSheet("color: gray; font-size: 14px;");
-    ui->upperDisplay1->setAlignment(Qt::AlignRight);
 
-
-    QList<QPushButton*> printButtons = {
-        ui->oneNum1, ui->twoNum1, ui->threeNum1,
-        ui->fourNum1, ui->fiveNum1, ui->sixNum1,
-        ui->sevenNum1, ui->eightNum1, ui->nineNum1,
-        ui->zeroNum1, ui->plus1, ui->minus1, ui->multiply1,
-        ui->division1, ui->dot1
-    };
-
-    for (QPushButton *button : printButtons) {
-        connect(button, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
-    }
-
-    // Створюємо меню
+    // Створення меню режимів
     QMenu *menu = new QMenu(this);
     menu->addAction("Звичайний", this, &MainWindow::setStandardMode);
     menu->addAction("Інженерний", this, &MainWindow::setEngineeringMode);
-
-    // Прив'язуємо меню до кнопки
     ui->toolButtonMenu1->setPopupMode(QToolButton::InstantPopup);
     ui->toolButtonMenu1->setMenu(menu);
+    ui->toolButtonMenu1_2->setPopupMode(QToolButton::InstantPopup);
+    ui->toolButtonMenu1_2->setMenu(menu);
 
-    // Стандартний калькулятор
-    ui->stackedWidget->setCurrentIndex(1);
-
+    // Ініціалізація режиму
+    setStandardMode();
 }
 
 MainWindow::~MainWindow()
@@ -45,48 +29,177 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::setStandardMode()
+{
+    // Перехід на сторінку звичайного режиму (індекс 1)
+    ui->stackedWidget->setCurrentIndex(1);
 
-void MainWindow::onButtonClicked() {
+    // Присвоєння вказівників на віджети звичайного режиму
+    QWidget* page = ui->stackedWidget->currentWidget();
+    currentDisplay = page->findChild<QLabel*>("display1");
+    currentUpperDisplay = page->findChild<QLabel*>("upperDisplay1");
+
+    currentDisplay->setStyleSheet("color: white; font-size: 24px;");
+    currentDisplay->setAlignment(Qt::AlignRight);
+    currentUpperDisplay->setStyleSheet("color: gray; font-size: 14px;");
+    currentUpperDisplay->setAlignment(Qt::AlignRight);
+
+    // Цифрові кнопки
+    currentDigitButtons = {
+        page->findChild<QPushButton*>("oneNum1"),
+        page->findChild<QPushButton*>("twoNum1"),
+        page->findChild<QPushButton*>("threeNum1"),
+        page->findChild<QPushButton*>("fourNum1"),
+        page->findChild<QPushButton*>("fiveNum1"),
+        page->findChild<QPushButton*>("sixNum1"),
+        page->findChild<QPushButton*>("sevenNum1"),
+        page->findChild<QPushButton*>("eightNum1"),
+        page->findChild<QPushButton*>("nineNum1"),
+        page->findChild<QPushButton*>("zeroNum1")
+    };
+    // Операторські кнопки
+    currentOperatorButtons = {
+        page->findChild<QPushButton*>("plus1"),
+        page->findChild<QPushButton*>("minus1"),
+        page->findChild<QPushButton*>("multiply1"),
+        page->findChild<QPushButton*>("division1"),
+        page->findChild<QPushButton*>("dot1")
+    };
+
+    // Інші функціональні кнопки
+    currentEqualButton = page->findChild<QPushButton*>("equal1");
+    currentDeleteButton = page->findChild<QPushButton*>("deleteButton1");
+    currentDeleteLineButton = page->findChild<QPushButton*>("deleteLine1");
+    currentDeleteAllButton = page->findChild<QPushButton*>("deleteAll1");
+    currentChangeSignButton = page->findChild<QPushButton*>("changeSign1");
+    currentReverseButton = page->findChild<QPushButton*>("reverseNumber1");
+    currentSquareButton = page->findChild<QPushButton*>("squareNumber1");
+    currentSqrtButton = page->findChild<QPushButton*>("squareRoot1");
+    currentPercentButton = page->findChild<QPushButton*>("getPercent1");
+
+    // Підключення слотів
+    for (auto *btn : currentDigitButtons)
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
+    //підключення операторів
+    for (auto *btn : currentOperatorButtons)
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
+    //підлючення функціональних кнопок
+    connect(currentEqualButton, &QPushButton::clicked, this, &MainWindow::on_equal_clicked);
+    connect(currentDeleteButton, &QPushButton::clicked, this, &MainWindow::on_deleteButton_clicked);
+    connect(currentDeleteLineButton, &QPushButton::clicked, this, &MainWindow::on_deleteLine_clicked);
+    connect(currentDeleteAllButton, &QPushButton::clicked, this, &MainWindow::on_deleteAll_clicked);
+    connect(currentChangeSignButton, &QPushButton::clicked, this, &MainWindow::on_changeSign_clicked);
+    connect(currentReverseButton, &QPushButton::clicked, this, &MainWindow::on_reverseNumber_clicked);
+    connect(currentSquareButton, &QPushButton::clicked, this, &MainWindow::on_squareNumber_clicked);
+    connect(currentSqrtButton, &QPushButton::clicked, this, &MainWindow::on_squareRoot_clicked);
+    connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked);
+}
+
+void MainWindow::setEngineeringMode()
+{
+    // Перехід на сторінку інженерного режиму (індекс 0)
+    ui->stackedWidget->setCurrentIndex(0);
+
+    // Присвоєння вказівників на віджети інженерного режиму
+    QWidget* page = ui->stackedWidget->currentWidget();
+    currentDisplay = page->findChild<QLabel*>("display1_2");
+    currentUpperDisplay = page->findChild<QLabel*>("upperDisplay1_2");
+
+    currentDisplay->setStyleSheet("color: white; font-size: 24px;");
+    currentDisplay->setAlignment(Qt::AlignRight);
+    currentUpperDisplay->setStyleSheet("color: gray; font-size: 14px;");
+    currentUpperDisplay->setAlignment(Qt::AlignRight);
+
+    // Цифрові кнопки
+    currentDigitButtons = {
+        page->findChild<QPushButton*>("oneNum1_2"),
+        page->findChild<QPushButton*>("twoNum1_2"),
+        page->findChild<QPushButton*>("threeNum1_2"),
+        page->findChild<QPushButton*>("fourNum1_2"),
+        page->findChild<QPushButton*>("fiveNum1_2"),
+        page->findChild<QPushButton*>("sixNum1_2"),
+        page->findChild<QPushButton*>("sevenNum1_2"),
+        page->findChild<QPushButton*>("eightNum1_2"),
+        page->findChild<QPushButton*>("nineNum1_2"),
+        page->findChild<QPushButton*>("zeroNum1_2")
+    };
+    // Операторські кнопки
+    currentOperatorButtons = {
+        page->findChild<QPushButton*>("plus1_2"),
+        page->findChild<QPushButton*>("minus1_2"),
+        page->findChild<QPushButton*>("multiply1_2"),
+        page->findChild<QPushButton*>("division1_2"),
+        page->findChild<QPushButton*>("dot1_2")
+    };
+
+    // Інші функціональні кнопки
+    currentEqualButton = page->findChild<QPushButton*>("equal1_2");
+    currentDeleteButton = page->findChild<QPushButton*>("deleteButton1_2");
+    currentDeleteLineButton = page->findChild<QPushButton*>("deleteLine1_2");
+    currentDeleteAllButton = page->findChild<QPushButton*>("deleteAll1_2");
+    currentChangeSignButton = page->findChild<QPushButton*>("changeSign1_2");
+    currentReverseButton = page->findChild<QPushButton*>("reverseNumber1_2");
+    currentSquareButton = page->findChild<QPushButton*>("squareNumber1_2");
+    currentSqrtButton = page->findChild<QPushButton*>("squareRoot1_2");
+    currentPercentButton = page->findChild<QPushButton*>("getPercent1_2");
+
+    // Підключення слотів
+    for (auto *btn : currentDigitButtons)
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
+    //підключення операторів
+    for (auto *btn : currentOperatorButtons)
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
+    //підлючення функціональних кнопок
+    connect(currentEqualButton, &QPushButton::clicked, this, &MainWindow::on_equal_clicked);
+    connect(currentDeleteButton, &QPushButton::clicked, this, &MainWindow::on_deleteButton_clicked);
+    connect(currentDeleteLineButton, &QPushButton::clicked, this, &MainWindow::on_deleteLine_clicked);
+    connect(currentDeleteAllButton, &QPushButton::clicked, this, &MainWindow::on_deleteAll_clicked);
+    connect(currentChangeSignButton, &QPushButton::clicked, this, &MainWindow::on_changeSign_clicked);
+    connect(currentReverseButton, &QPushButton::clicked, this, &MainWindow::on_reverseNumber_clicked);
+    connect(currentSquareButton, &QPushButton::clicked, this, &MainWindow::on_squareNumber_clicked);
+    connect(currentSqrtButton, &QPushButton::clicked, this, &MainWindow::on_squareRoot_clicked);
+    connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked);
+}
+
+
+void MainWindow::onButtonClicked()
+{
     QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
+    if (!clickedButton || !currentDisplay)
+        return;
+
     QString buttonValue = clickedButton->text();
-    QString currentText = ui->display1->text();
+    QString currentText = currentDisplay->text();
 
     // Якщо дисплей пустий
     if (displayIsEmpty) {
-        // Першим не можуть бути * або /
         if (buttonValue == "*" || buttonValue == "/") return;
 
-        // Якщо це крапка — додаємо "0."
         if (buttonValue == ".") {
-            ui->display1->setText("0.");
+            currentDisplay->setText("0.");
             lastEntered = "0.";
-        }
-        else {
-            ui->display1->setText(buttonValue);
+        } else {
+            currentDisplay->setText(buttonValue);
             lastEntered = buttonValue;
         }
         displayIsEmpty = false;
         return;
     }
 
-    // Якщо останній введений — оператор
+    // Перевірка чи минулий символ був числом
     bool lastWasNumber;
     lastEntered.toDouble(&lastWasNumber);
 
-    //заміна операторів
-    if(QString("+-*/").contains(buttonValue) && QString("+-*/").contains(lastEntered)){
+    // Змінини оператор, якщо був введений інший оператор
+    if (QString("+-*/").contains(buttonValue) && QString("+-*/").contains(lastEntered)) {
         currentText.chop(1);
         currentText += buttonValue;
-        ui->display1->setText(currentText);
+        currentDisplay->setText(currentText);
+        lastEntered = buttonValue;
         return;
     }
 
-    // Заборона двох операторів поспіль
-    //if (!lastWasNumber && QString("+-*/").contains(buttonValue)) {
-    //    return;
-    //}
-
-    // Заборона двох крапок в одному числі
+    // Запобігання багатьом точкам в числі
     if (lastWasNumber && buttonValue == "." && lastEntered.contains(".")) {
         return;
     }
@@ -96,115 +209,107 @@ void MainWindow::onButtonClicked() {
         return;
     }
 
-    // Дозволене натискання — додаємо
-    ui->display1->setText(currentText + buttonValue);
+    // Додавання до екрану
+    currentDisplay->setText(currentText + buttonValue);
 
-    // Оновлюємо lastEntered
+    // Оновлення lastEntered
     if (QString("+-*/()").contains(buttonValue)) {
         lastEntered = buttonValue;
     } else {
-        if(!lastWasNumber) lastEntered = buttonValue;
-        else lastEntered += buttonValue;
+        if (!lastWasNumber)
+            lastEntered = buttonValue;
+        else
+            lastEntered += buttonValue;
     }
 }
 
-void MainWindow::on_deleteButton1_clicked()
+void MainWindow::on_deleteButton_clicked()
 {
     if(!displayIsEmpty){
-        QString text = ui->display1->text();
+        QString text = currentDisplay->text();
         text.chop(1); // видаляє останній символ
         lastEntered.chop(1);
-        ui->display1->setText(text);
+        currentDisplay->setText(text);
     }
-    if(ui->display1->text().isEmpty()){
+    if(currentDisplay->text().isEmpty()){
         displayIsEmpty = true;
-        ui->display1->setText(ui->display1->text() + '0');
+        currentDisplay->setText(currentDisplay->text() + '0');
     }
 }
 
-void MainWindow::on_deleteLine1_clicked()
+void MainWindow::on_deleteLine_clicked()
 {
-    ui->display1->clear();
+    currentDisplay->clear();
     lastEntered.clear();
     displayIsEmpty = true;
-    ui->display1->setText(ui->display1->text() + '0');
+    currentDisplay->setText(currentDisplay->text() + '0');
 }
 
-void MainWindow::on_equal1_clicked()
+void MainWindow::on_deleteAll_clicked()
 {
-    QString expr = ui->display1->text();
+    currentDisplay->clear();
+    currentUpperDisplay->clear();
+    lastEntered.clear();
+    displayIsEmpty = true;
+    currentDisplay->setText(currentDisplay->text() + '0');
+}
+
+void MainWindow::on_equal_clicked()
+{
+    QString expr = currentDisplay->text();
     QVector<Token> tokens = CalculatorEngine::tokenize(expr);
     QQueue<Token> rnp = CalculatorEngine::parsing(tokens);
     double result = CalculatorEngine::evaluate(rnp);
 
     // Показуємо попередній вираз (меншим, сірим)
-    ui->upperDisplay1->setText(expr);
+    currentUpperDisplay->setText(expr);
 
     // Показуємо результат більшим шрифтом
-    ui->display1->setText(QString::number(result));
+    currentDisplay->setText(QString::number(result));
 
 }
 
-void MainWindow::on_changeSign1_clicked()
+void MainWindow::on_changeSign_clicked()
 {
-    QString text = ui->display1->text();
+    QString text = currentDisplay->text();
     text = CalculatorEngine::toggleLastNumberSign(text);
-    ui->display1->setText(text);
+    currentDisplay->setText(text);
 }
 
-void MainWindow::on_deleteAll1_clicked()
+void MainWindow::on_reverseNumber_clicked()
 {
-    ui->display1->clear();
-    ui->upperDisplay1->clear();
-    lastEntered.clear();
-    displayIsEmpty = true;
-    ui->display1->setText(ui->display1->text() + '0');
-}
-
-void MainWindow::on_reverseNumber1_clicked()
-{
-    QString text = ui->display1->text();
+    QString text = currentDisplay->text();
     text = CalculatorEngine::reverseNumber(text);
-    ui->display1->setText(text);
+    currentDisplay->setText(text);
 }
 
-void MainWindow::on_squareNumber1_clicked()
+void MainWindow::on_squareNumber_clicked()
 {
-    QString text = ui->display1->text();
+    QString text = currentDisplay->text();
     text = CalculatorEngine::squareNumber(text);
-    ui->upperDisplay1->setText(ui->display1->text() + "^2");
-    ui->display1->setText(text);
+    currentUpperDisplay->setText(currentDisplay->text() + "^2");
+    currentDisplay->setText(text);
 }
 
-void MainWindow::on_squareRoot1_clicked()
+void MainWindow::on_squareRoot_clicked()
 {
     int posOfSqrt;
-    QString text = ui->display1->text();
+    QString text = currentDisplay->text();
     QString oldText = text;
     text = CalculatorEngine::squareRootNumber(text, posOfSqrt);
     oldText.insert(posOfSqrt, "√");
-    ui->upperDisplay1->setText(oldText);
-    ui->display1->setText(text);
+    currentUpperDisplay->setText(oldText);
+    currentDisplay->setText(text);
 }
 
-void MainWindow::on_getPercent1_clicked()
+void MainWindow::on_getPercent_clicked()
 {
-    QString text = ui->display1->text();
+    QString text = currentDisplay->text();
     text = CalculatorEngine::getPercent(text);
-    ui->display1->setText(text);
+    currentDisplay->setText(text);
 }
 
-void MainWindow::setStandardMode()
-{
-    // стандартний калькулятор
-    ui->stackedWidget->setCurrentIndex(1);
-}
 
-void MainWindow::setEngineeringMode()
-{
-    // інженерний калькулятор
-    ui->stackedWidget->setCurrentIndex(0);
-}
 
 
 

@@ -2,12 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QList>
+#include <QLabel>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
+namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -19,35 +19,39 @@ public:
     ~MainWindow();
 
 private slots:
-
     void onButtonClicked();
-
-    void on_deleteButton1_clicked();
-
-    void on_deleteLine1_clicked();
-
-    void on_equal1_clicked();
-
-    void on_changeSign1_clicked();
-
-    void on_deleteAll1_clicked();
-
-    void on_reverseNumber1_clicked();
-
-    void on_squareNumber1_clicked();
-
-    void on_squareRoot1_clicked();
-
-    void on_getPercent1_clicked();
+    void on_deleteButton_clicked();
+    void on_deleteLine_clicked();
+    void on_deleteAll_clicked();
+    void on_equal_clicked();
+    void on_changeSign_clicked();
+    void on_reverseNumber_clicked();
+    void on_squareNumber_clicked();
+    void on_squareRoot_clicked();
+    void on_getPercent_clicked();
 
     void setStandardMode();
-
     void setEngineeringMode();
 
-
 private:
+    Ui::MainWindow *ui;
     bool displayIsEmpty = true;
     QString lastEntered;
-    Ui::MainWindow *ui;
+
+    // Current active widgets and buttons
+    QLabel* currentDisplay;
+    QLabel* currentUpperDisplay;
+    QList<QPushButton*> currentDigitButtons;
+    QList<QPushButton*> currentOperatorButtons;
+    QPushButton* currentEqualButton;
+    QPushButton* currentDeleteButton;
+    QPushButton* currentDeleteAllButton;
+    QPushButton* currentDeleteLineButton;
+    QPushButton* currentChangeSignButton;
+    QPushButton* currentReverseButton;
+    QPushButton* currentSquareButton;
+    QPushButton* currentSqrtButton;
+    QPushButton* currentPercentButton;
 };
+
 #endif // MAINWINDOW_H
