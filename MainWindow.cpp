@@ -144,6 +144,10 @@ void MainWindow::setEngineeringMode()
     currentSquareButton = page->findChild<QPushButton*>("squareNumber1");
     currentSqrtButton = page->findChild<QPushButton*>("squareRoot1");
     currentPercentButton = page->findChild<QPushButton*>("getPercent1");
+    currentPiButton = page->findChild<QPushButton*>("piButton");
+    currentEButton = page->findChild<QPushButton*>("eButton");
+    currentLeftParenButton = page->findChild<QPushButton*>("leftParenButton");
+    currentRightParenButton = page->findChild<QPushButton*>("rightParenButton");
 
     // Підключення слотів
     for (auto *btn : currentDigitButtons)
@@ -161,6 +165,8 @@ void MainWindow::setEngineeringMode()
     connect(currentSquareButton, &QPushButton::clicked, this, &MainWindow::on_squareNumber_clicked);
     connect(currentSqrtButton, &QPushButton::clicked, this, &MainWindow::on_squareRoot_clicked);
     connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked);
+    connect(currentPiButton, &QPushButton::clicked, this, &MainWindow::on_piButton_clicked);
+    connect(currentEButton, &QPushButton::clicked, this, &MainWindow::on_eButton_clicked);
 }
 
 //функція для додавання символа на екран
@@ -323,36 +329,53 @@ void MainWindow::on_getPercent_clicked()
 void MainWindow::on_piButton_clicked()
 {
     if(QString("+-*/").contains(lastEntered)){
+        QString text = currentDisplay->text();
         if(displayIsEmpty){
-            QString text = currentDisplay->text();
             text = "3.1415926";
             lastEntered = text;
             displayIsEmpty = false;
             currentDisplay->setText(text);
         }
         else{
-            QString text = currentDisplay->text();
             currentDisplay->setText(text + "3.1415926");
             lastEntered = "3.1415926";
         }
     }
 }
 
-
 void MainWindow::on_eButton_clicked()
 {
     if(QString("+-*/").contains(lastEntered)){
+        QString text = currentDisplay->text();
         if(displayIsEmpty){
-            QString text = currentDisplay->text();
             text = "2.7182818";
             lastEntered = text;
             displayIsEmpty = false;
             currentDisplay->setText(text);
         }
         else{
-            QString text = currentDisplay->text();
             currentDisplay->setText(text + "2.7182818");
             lastEntered = "2.7182818";
         }
     }
 }
+
+void MainWindow::on_LeftParenButton_clicked()
+{
+    QString text = currentDisplay->text();
+    if(QString("+-*/").contains(lastEntered)){
+        if(displayIsEmpty){
+            text = "(";
+            currentDisplay->setText(text);
+        }
+        else{
+            text += '(';
+            currentDisplay->setText(text);
+        }
+    }
+    else{
+
+    }
+
+}
+

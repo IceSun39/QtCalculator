@@ -39,6 +39,8 @@ private slots:
 
     void on_eButton_clicked();
 
+    void on_LeftParenButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     bool displayIsEmpty = true;
@@ -58,6 +60,10 @@ private:
     QPushButton* currentSquareButton;
     QPushButton* currentSqrtButton;
     QPushButton* currentPercentButton;
-};
+    QPushButton* currentPiButton;
+    QPushButton* currentEButton;
+    QPushButton* currentLeftParenButton;
+    QPushButton* currentRightParenButton;
 
+};
 #endif // MAINWINDOW_H
