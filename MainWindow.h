@@ -33,6 +33,12 @@ private slots:
     void setStandardMode();
     void setEngineeringMode();
 
+
+
+    void on_piButton_clicked();
+
+    void on_eButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     bool displayIsEmpty = true;

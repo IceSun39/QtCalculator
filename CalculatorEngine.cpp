@@ -204,6 +204,7 @@ double CalculatorEngine::getLastNumber(const QString& text, int& numberStartInde
     return numberStr.toDouble();
 }
 
+//перевіряє на (-
 bool CalculatorEngine::isNegativeWrapped(const QString& text, int startIndex, double number)
 {
     // Генеруємо рядок типу "(-12)" або "(-12.5)"
@@ -213,6 +214,7 @@ bool CalculatorEngine::isNegativeWrapped(const QString& text, int startIndex, do
     return text.mid(startIndex, wrapped.length()) == wrapped;
 }
 
+//повертає 1/(число)
 QString CalculatorEngine::wrapAsReciprocal(double number)
 {
     return "1/" + QString::number(number, 'g', 15);
@@ -223,6 +225,7 @@ QString CalculatorEngine::wrapAsReciprocal(const QString &expression)
     return "1/" + expression;
 }
 
+//видаляє останнє число
 QString CalculatorEngine::removeLastNumber(const QString &text, int startIndex)
 {
     QString expr = text;
@@ -230,6 +233,7 @@ QString CalculatorEngine::removeLastNumber(const QString &text, int startIndex)
     return expr;
 }
 
+//перевіряє чи число загорнуте в дужки
 bool CalculatorEngine::isWrappedInParentheses(const QString& text, int numberStartIndex)
 {
     //якщо розмір менше двох, то дужок ніяк там бути не може
@@ -255,6 +259,7 @@ bool CalculatorEngine::isWrappedInParentheses(const QString& text, int numberSta
     return ok;
 }
 
+//функція для 1/число
 QString CalculatorEngine::reverseNumber(const QString &expression)
 {
     // Копіюємо вхідний вираз, щоб не змінювати оригінальний
@@ -297,8 +302,8 @@ QString CalculatorEngine::reverseNumber(const QString &expression)
     return text;
 }
 
-QString CalculatorEngine::squareNumber(const QString &expression)
-{
+//функція для піднесення до квадрату
+QString CalculatorEngine::squareNumber(const QString &expression){
     QString text = expression;
     int numberStartIndex;
     double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
@@ -320,6 +325,8 @@ QString CalculatorEngine::squareNumber(const QString &expression)
 
     return text;
 }
+
+//функція для знаходження квадратного кореня
 QString CalculatorEngine::squareRootNumber(const QString &expression, int& posOfSqrt)
 {
     QString text = expression;
@@ -352,6 +359,7 @@ QString CalculatorEngine::squareRootNumber(const QString &expression, int& posOf
     return text;
 }
 
+//функція яка повертає один процент від числа
 QString CalculatorEngine::getPercent(const QString &expression)
 {
     QString text = expression;
@@ -377,7 +385,7 @@ QString CalculatorEngine::getPercent(const QString &expression)
     return text;
 }
 
-
+//функція для зміни знака числа
 QString CalculatorEngine::toggleLastNumberSign(const QString& expression)
 {
     QString text = expression;

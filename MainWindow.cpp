@@ -29,7 +29,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
+//ставить стандартний режим
 void MainWindow::setStandardMode()
 {
     // Перехід на сторінку стандартного режиму (індекс 0)
@@ -96,6 +96,7 @@ void MainWindow::setStandardMode()
     connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked);
 }
 
+//ставить інженерний режим
 void MainWindow::setEngineeringMode()
 {
     // Перехід на сторінку інженерного режиму (індекс 1)
@@ -162,6 +163,7 @@ void MainWindow::setEngineeringMode()
     connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked);
 }
 
+//функція для додавання символа на екран
 void MainWindow::onButtonClicked()
 {
     QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
@@ -223,6 +225,7 @@ void MainWindow::onButtonClicked()
     }
 }
 
+//видалення останнього символу
 void MainWindow::on_deleteButton_clicked()
 {
     if(!displayIsEmpty){
@@ -237,6 +240,7 @@ void MainWindow::on_deleteButton_clicked()
     }
 }
 
+//видалення рядка
 void MainWindow::on_deleteLine_clicked()
 {
     currentDisplay->clear();
@@ -245,6 +249,7 @@ void MainWindow::on_deleteLine_clicked()
     currentDisplay->setText(currentDisplay->text() + '0');
 }
 
+//видалення рядка та сірого рядка зверху
 void MainWindow::on_deleteAll_clicked()
 {
     currentDisplay->clear();
@@ -254,6 +259,7 @@ void MainWindow::on_deleteAll_clicked()
     currentDisplay->setText(currentDisplay->text() + '0');
 }
 
+//кнопка дорівнює
 void MainWindow::on_equal_clicked()
 {
     QString expr = currentDisplay->text();
@@ -269,6 +275,7 @@ void MainWindow::on_equal_clicked()
 
 }
 
+//міняє знак останнього числа
 void MainWindow::on_changeSign_clicked()
 {
     QString text = currentDisplay->text();
@@ -276,6 +283,7 @@ void MainWindow::on_changeSign_clicked()
     currentDisplay->setText(text);
 }
 
+//обертає число (1/число)
 void MainWindow::on_reverseNumber_clicked()
 {
     QString text = currentDisplay->text();
@@ -283,6 +291,7 @@ void MainWindow::on_reverseNumber_clicked()
     currentDisplay->setText(text);
 }
 
+//підносить до квадрату
 void MainWindow::on_squareNumber_clicked()
 {
     QString text = currentDisplay->text();
@@ -291,6 +300,7 @@ void MainWindow::on_squareNumber_clicked()
     currentDisplay->setText(text);
 }
 
+//шукає квадратний корінь
 void MainWindow::on_squareRoot_clicked()
 {
     int posOfSqrt;
@@ -302,6 +312,7 @@ void MainWindow::on_squareRoot_clicked()
     currentDisplay->setText(text);
 }
 
+//находить один відсоток від числа
 void MainWindow::on_getPercent_clicked()
 {
     QString text = currentDisplay->text();
@@ -309,8 +320,39 @@ void MainWindow::on_getPercent_clicked()
     currentDisplay->setText(text);
 }
 
+void MainWindow::on_piButton_clicked()
+{
+    if(QString("+-*/").contains(lastEntered)){
+        if(displayIsEmpty){
+            QString text = currentDisplay->text();
+            text = "3.1415926";
+            lastEntered = text;
+            displayIsEmpty = false;
+            currentDisplay->setText(text);
+        }
+        else{
+            QString text = currentDisplay->text();
+            currentDisplay->setText(text + "3.1415926");
+            lastEntered = "3.1415926";
+        }
+    }
+}
 
 
-
-
-
+void MainWindow::on_eButton_clicked()
+{
+    if(QString("+-*/").contains(lastEntered)){
+        if(displayIsEmpty){
+            QString text = currentDisplay->text();
+            text = "2.7182818";
+            lastEntered = text;
+            displayIsEmpty = false;
+            currentDisplay->setText(text);
+        }
+        else{
+            QString text = currentDisplay->text();
+            currentDisplay->setText(text + "2.7182818");
+            lastEntered = "2.7182818";
+        }
+    }
+}
