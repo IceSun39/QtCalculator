@@ -301,7 +301,7 @@ void MainWindow::on_reverseNumber_clicked()
 void MainWindow::on_squareNumber_clicked()
 {
     QString text = currentDisplay->text();
-    text = CalculatorEngine::squareNumber(text);
+    text = CalculatorEngine::numberToPower(text,2);
     currentUpperDisplay->setText(currentDisplay->text() + "^2");
     currentDisplay->setText(text);
 }
@@ -312,7 +312,7 @@ void MainWindow::on_squareRoot_clicked()
     int posOfSqrt;
     QString text = currentDisplay->text();
     QString oldText = text;
-    text = CalculatorEngine::squareRootNumber(text, posOfSqrt);
+    text = CalculatorEngine::rootNumber(text, 2, posOfSqrt);
     oldText.insert(posOfSqrt, "√");
     currentUpperDisplay->setText(oldText);
     currentDisplay->setText(text);
@@ -398,7 +398,118 @@ void MainWindow::on_RightParenButton_clicked()
         if(QString("+-*/").contains(lastEntered)) return;
         else{
             currentDisplay->setText(text + ')');
+            lastEntered = ')';
         }
     }
+}
+
+void MainWindow::on_lnButton_clicked()
+{
+    QString text = currentDisplay->text();
+    leftParenCount++;
+    //якзо екран пустий
+    if (displayIsEmpty) {
+        text = "ln(";
+        currentDisplay->setText(text);
+        displayIsEmpty = false;
+    //якщо останній раз був введений оператор
+    } else if (QString("+-*/(").contains(lastEntered)) {
+        currentDisplay->setText(text + "ln(");
+        //
+    } else {
+        currentDisplay->setText(text + "*ln(");
+    }
+    lastEntered = "ln(";
+}
+
+void MainWindow::on_logButton_clicked()
+{
+    QString text = currentDisplay->text();
+    leftParenCount++;
+    //якзо екран пустий
+    if (displayIsEmpty) {
+        text = "log(";
+        currentDisplay->setText(text);
+        displayIsEmpty = false;
+    //якщо останній раз був введений оператор
+    } else if (QString("+-*/(").contains(lastEntered)) {
+        currentDisplay->setText(text + "log(");
+        //
+    } else {
+        currentDisplay->setText(text + "*log(");
+    }
+    lastEntered = "log(";
+}
+
+void MainWindow::on_tenToPowerButton_clicked()
+{
+    QString text = currentDisplay->text();
+    //якзо екран пустий
+    if (displayIsEmpty) {
+        text = "10^";
+        currentDisplay->setText(text);
+        displayIsEmpty = false;
+    //якщо останній раз був введений оператор
+    } else if (QString("+-*/(").contains(lastEntered)) {
+        currentDisplay->setText(text + "10^");
+        //
+    } else {
+        currentDisplay->setText(text + "*10^");
+    }
+    lastEntered = "10^";
+}
+
+void MainWindow::on_xToPowerButton_clicked()
+{
+    QString text = currentDisplay->text();
+    bool lastWasNumber;
+    lastEntered.toDouble(&lastWasNumber);
+
+    //підносити в степінь можна тільки якщо останнє введене було число або ')'
+    if(lastWasNumber || lastEntered == ')'){
+        currentDisplay->setText(text + '^');
+        lastEntered = "^";
+    }
+}
+
+void MainWindow::on_sqrtRootNButton_clicked()
+{
+    QString text = currentDisplay->text();
+    bool lastWasNumber;
+    lastEntered.toDouble(&lastWasNumber);
+
+    //знаходити корінь можна тільки якщо останнє введене було число або ')'
+    if(lastWasNumber || lastEntered == ')'){
+        currentDisplay->setText(text + "ysqrt");
+        lastEntered = "ysqrt";
+    }
+}
+
+
+void MainWindow::on_absButton_clicked()
+{
+    QString text = currentDisplay->text();
+    bool lastWasNumber;
+    lastEntered.toDouble(&lastWasNumber);
+    leftParenCount++;
+
+    // Знаходимо останнє число у виразі та індекс, з якого воно починається
+    int numberStartIndex;
+    double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
+
+    int numberPrevIndex = numberStartIndex == 0 ? 0 : numberStartIndex - 1;
+
+    if(displayIsEmpty){
+        text = "abs(";
+        currentDisplay->setText(text);
+    }
+    else if(lastWasNumber){
+        text.insert(numberPrevIndex, "abs(");
+        currentDisplay->setText(text);
+    }
+    else{
+        currentDisplay->setText(text + "*abs(");
+    }
+    lastEntered = "abs(";
 }
 

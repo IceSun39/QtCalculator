@@ -25,8 +25,8 @@ public:
     static double getLastNumber(const QString& text, int& lastIndex);
     static QString toggleLastNumberSign(const QString& expression);
     static QString reverseNumber(const QString& expression);
-    static QString squareNumber(const QString& expression);
-    static QString squareRootNumber(const QString& expression, int& posOfSqrt);
+    static QString numberToPower(const QString& expression, int power);
+    static QString rootNumber(const QString& expression, int powerOfRoot ,int& posOfSqrt);
     static QString getPercent(const QString& expression);
 private:
     static int getPriority(QChar oper);

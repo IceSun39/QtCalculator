@@ -40,6 +40,7 @@ private slots:
     void on_getPercent_clicked();
 
     void setStandardMode();
+
     void setEngineeringMode();
 
     void on_piButton_clicked();
@@ -49,6 +50,18 @@ private slots:
     void on_LeftParenButton_clicked();
 
     void on_RightParenButton_clicked();
+
+    void on_lnButton_clicked();
+
+    void on_logButton_clicked();
+
+    void on_tenToPowerButton_clicked();
+
+    void on_xToPowerButton_clicked();
+
+    void on_sqrtRootNButton_clicked();
+
+    void on_absButton_clicked();
 
 private:
     Ui::MainWindow *ui;

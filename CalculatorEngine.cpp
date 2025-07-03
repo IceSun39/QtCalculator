@@ -1,7 +1,7 @@
 #include "CalculatorEngine.h"
 
 // Токенізуємо вхідний текстовий рядок у список токенів
-// додати випадки для abs, exp, mod, log, ln, yroot, ^
+// додати випадки для abs, exp, mod, log, ln, yroot, ^, знаходження кореня недоробив
 QVector<Token> CalculatorEngine::tokenize(const QString& text) {
     QVector<Token> tokens;
     int i = 0;
@@ -322,7 +322,8 @@ QString CalculatorEngine::reverseNumber(const QString &expression)
 }
 
 //функція для піднесення до квадрату
-QString CalculatorEngine::squareNumber(const QString &expression){
+QString CalculatorEngine::numberToPower(const QString& expression, int power)
+{
     QString text = expression;
 
     int numberStartIndex;
@@ -332,10 +333,11 @@ QString CalculatorEngine::squareNumber(const QString &expression){
     if (text.endsWith(')')) {
         subExpr = CalculatorEngine::extractExpressionInParentheses(text, numberStartIndex);
         if (!subExpr.isEmpty()) {
+            //обчислюємо значення в дужках
             QVector<Token> tokens = CalculatorEngine::tokenize(subExpr.mid(1, subExpr.length() - 2)); // без дужок
             QQueue<Token> rpn = CalculatorEngine::parsing(tokens);
             double value = CalculatorEngine::evaluate(rpn);
-            value *= value;
+            std::pow(value, power);
 
             // видалити підвираз із text
             text = text.left(numberStartIndex);
@@ -344,9 +346,8 @@ QString CalculatorEngine::squareNumber(const QString &expression){
         }
     }
 
-    // Інакше працюємо по-старому
     double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
-    number *= number;
+    std::pow(number, power);
 
     if(CalculatorEngine::isWrappedInParentheses(text, numberStartIndex)){
         numberStartIndex = text.lastIndexOf('(', numberStartIndex);
@@ -360,24 +361,35 @@ QString CalculatorEngine::squareNumber(const QString &expression){
 
 
 //функція для знаходження квадратного кореня
-QString CalculatorEngine::squareRootNumber(const QString &expression, int& posOfSqrt)
+QString CalculatorEngine::rootNumber(const QString& expression, int powerOfRoot ,int& posOfSqrt)
 {
     QString text = expression;
+    QString subExpr;
     int numberStartIndex;
     double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
 
     // Якщо число обгорнуте в дужки (наприклад (-6))
-    if (CalculatorEngine::isWrappedInParentheses(text, numberStartIndex)) {
-        // Знаходимо позицію відкриваючої дужки
-        numberStartIndex = text.lastIndexOf('(', numberStartIndex);
+    if (text.endsWith(')')) {
+        subExpr = CalculatorEngine::extractExpressionInParentheses(text, numberStartIndex);
+        if (!subExpr.isEmpty()) {
+            QVector<Token> tokens = CalculatorEngine::tokenize(subExpr.mid(1, subExpr.length() - 2)); // без дужок
+            QQueue<Token> rpn = CalculatorEngine::parsing(tokens);
+            double value = CalculatorEngine::evaluate(rpn);
+            if(value < 0 && powerOfRoot % 2 == 0){
+                return "Error, finding root from negative value";
+            }
+            else pow(value, powerOfRoot);
 
-        // Перевіряємо, чи число від'ємне
-        if (text.at(numberStartIndex + 1) == '-')
-            return "Error"; // Корінь із від’ємного числа не обробляється
+            // видалити підвираз із text
+            text = text.left(numberStartIndex);
+            text += QString::number(value, 'g', 15);
+            return text;
+        }
     }
 
-    // Обчислюємо квадратний корінь
-    number = std::sqrt(number);
+
+    // Обчислюємо корінь
+    number = std::pow(number, powerOfRoot);;
 
 
     //зберігаємо індекс куди вставити значок кореня
