@@ -80,20 +80,20 @@ void MainWindow::setStandardMode()
 
     // Підключення слотів
     for (auto *btn : currentDigitButtons)
-        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked, Qt::UniqueConnection);
     //підключення операторів
     for (auto *btn : currentOperatorButtons)
-        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked, Qt::UniqueConnection);
     //підлючення функціональних кнопок
-    connect(currentEqualButton, &QPushButton::clicked, this, &MainWindow::on_equal_clicked);
-    connect(currentDeleteButton, &QPushButton::clicked, this, &MainWindow::on_deleteButton_clicked);
-    connect(currentDeleteLineButton, &QPushButton::clicked, this, &MainWindow::on_deleteLine_clicked);
-    connect(currentDeleteAllButton, &QPushButton::clicked, this, &MainWindow::on_deleteAll_clicked);
-    connect(currentChangeSignButton, &QPushButton::clicked, this, &MainWindow::on_changeSign_clicked);
-    connect(currentReverseButton, &QPushButton::clicked, this, &MainWindow::on_reverseNumber_clicked);
-    connect(currentSquareButton, &QPushButton::clicked, this, &MainWindow::on_squareNumber_clicked);
-    connect(currentSqrtButton, &QPushButton::clicked, this, &MainWindow::on_squareRoot_clicked);
-    connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked);
+    connect(currentEqualButton, &QPushButton::clicked, this, &MainWindow::on_equal_clicked, Qt::UniqueConnection);
+    connect(currentDeleteButton, &QPushButton::clicked, this, &MainWindow::on_deleteButton_clicked, Qt::UniqueConnection);
+    connect(currentDeleteLineButton, &QPushButton::clicked, this, &MainWindow::on_deleteLine_clicked, Qt::UniqueConnection);
+    connect(currentDeleteAllButton, &QPushButton::clicked, this, &MainWindow::on_deleteAll_clicked, Qt::UniqueConnection);
+    connect(currentChangeSignButton, &QPushButton::clicked, this, &MainWindow::on_changeSign_clicked, Qt::UniqueConnection);
+    connect(currentReverseButton, &QPushButton::clicked, this, &MainWindow::on_reverseNumber_clicked, Qt::UniqueConnection);
+    connect(currentSquareButton, &QPushButton::clicked, this, &MainWindow::on_squareNumber_clicked, Qt::UniqueConnection);
+    connect(currentSqrtButton, &QPushButton::clicked, this, &MainWindow::on_squareRoot_clicked, Qt::UniqueConnection);
+    connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked, Qt::UniqueConnection);
 }
 
 //ставить інженерний режим
@@ -144,29 +144,24 @@ void MainWindow::setEngineeringMode()
     currentSquareButton = page->findChild<QPushButton*>("squareNumber1");
     currentSqrtButton = page->findChild<QPushButton*>("squareRoot1");
     currentPercentButton = page->findChild<QPushButton*>("getPercent1");
-    currentPiButton = page->findChild<QPushButton*>("piButton");
-    currentEButton = page->findChild<QPushButton*>("eButton");
-    currentLeftParenButton = page->findChild<QPushButton*>("leftParenButton");
-    currentRightParenButton = page->findChild<QPushButton*>("rightParenButton");
 
     // Підключення слотів
     for (auto *btn : currentDigitButtons)
-        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked, Qt::UniqueConnection);
     //підключення операторів
     for (auto *btn : currentOperatorButtons)
-        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked, Qt::UniqueConnection);
     //підлючення функціональних кнопок
-    connect(currentEqualButton, &QPushButton::clicked, this, &MainWindow::on_equal_clicked);
-    connect(currentDeleteButton, &QPushButton::clicked, this, &MainWindow::on_deleteButton_clicked);
-    connect(currentDeleteLineButton, &QPushButton::clicked, this, &MainWindow::on_deleteLine_clicked);
-    connect(currentDeleteAllButton, &QPushButton::clicked, this, &MainWindow::on_deleteAll_clicked);
-    connect(currentChangeSignButton, &QPushButton::clicked, this, &MainWindow::on_changeSign_clicked);
-    connect(currentReverseButton, &QPushButton::clicked, this, &MainWindow::on_reverseNumber_clicked);
-    connect(currentSquareButton, &QPushButton::clicked, this, &MainWindow::on_squareNumber_clicked);
-    connect(currentSqrtButton, &QPushButton::clicked, this, &MainWindow::on_squareRoot_clicked);
-    connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked);
-    connect(currentPiButton, &QPushButton::clicked, this, &MainWindow::on_piButton_clicked);
-    connect(currentEButton, &QPushButton::clicked, this, &MainWindow::on_eButton_clicked);
+    connect(currentEqualButton, &QPushButton::clicked, this, &MainWindow::on_equal_clicked, Qt::UniqueConnection);
+    connect(currentDeleteButton, &QPushButton::clicked, this, &MainWindow::on_deleteButton_clicked, Qt::UniqueConnection);
+    connect(currentDeleteLineButton, &QPushButton::clicked, this, &MainWindow::on_deleteLine_clicked, Qt::UniqueConnection);
+    connect(currentDeleteAllButton, &QPushButton::clicked, this, &MainWindow::on_deleteAll_clicked, Qt::UniqueConnection);
+    connect(currentChangeSignButton, &QPushButton::clicked, this, &MainWindow::on_changeSign_clicked, Qt::UniqueConnection);
+    connect(currentReverseButton, &QPushButton::clicked, this, &MainWindow::on_reverseNumber_clicked, Qt::UniqueConnection);
+    connect(currentSquareButton, &QPushButton::clicked, this, &MainWindow::on_squareNumber_clicked, Qt::UniqueConnection);
+    connect(currentSqrtButton, &QPushButton::clicked, this, &MainWindow::on_squareRoot_clicked, Qt::UniqueConnection);
+    connect(currentPercentButton, &QPushButton::clicked, this, &MainWindow::on_getPercent_clicked, Qt::UniqueConnection);
+
 }
 
 //функція для додавання символа на екран
@@ -181,7 +176,7 @@ void MainWindow::onButtonClicked()
 
     // Якщо дисплей пустий
     if (displayIsEmpty) {
-        if (buttonValue == "*" || buttonValue == "/") return;
+        if (buttonValue == "*" || buttonValue == "/" || buttonValue == ")") return;
 
         if (buttonValue == ".") {
             currentDisplay->setText("0.");
@@ -269,6 +264,11 @@ void MainWindow::on_deleteAll_clicked()
 void MainWindow::on_equal_clicked()
 {
     QString expr = currentDisplay->text();
+    //додаємо дужки
+    int missedParens = leftParenCount - rightParenCount;
+    while(missedParens-- > 0){
+        expr += ')';
+    }
     QVector<Token> tokens = CalculatorEngine::tokenize(expr);
     QQueue<Token> rnp = CalculatorEngine::parsing(tokens);
     double result = CalculatorEngine::evaluate(rnp);
@@ -326,56 +326,79 @@ void MainWindow::on_getPercent_clicked()
     currentDisplay->setText(text);
 }
 
+//кнопка для пі
 void MainWindow::on_piButton_clicked()
 {
-    if(QString("+-*/").contains(lastEntered)){
-        QString text = currentDisplay->text();
-        if(displayIsEmpty){
-            text = "3.1415926";
-            lastEntered = text;
-            displayIsEmpty = false;
-            currentDisplay->setText(text);
-        }
-        else{
-            currentDisplay->setText(text + "3.1415926");
-            lastEntered = "3.1415926";
-        }
+    QString text = currentDisplay->text();
+    bool lastWasNumber;
+    lastEntered.toDouble(&lastWasNumber);
+    if(displayIsEmpty){
+        text = PI;
+        lastEntered = PI;
+        displayIsEmpty = false;
     }
+    else if(QString("+-*/(").contains(lastEntered)){
+        text += PI;
+    }
+    else if(lastEntered == ')' || lastWasNumber){
+        text = text + '*' + PI;
+    }
+    currentDisplay->setText(text);
+    lastEntered = PI;
 }
 
+//кнопка для числа Ейлера
 void MainWindow::on_eButton_clicked()
 {
-    if(QString("+-*/").contains(lastEntered)){
-        QString text = currentDisplay->text();
-        if(displayIsEmpty){
-            text = "2.7182818";
-            lastEntered = text;
-            displayIsEmpty = false;
-            currentDisplay->setText(text);
-        }
-        else{
-            currentDisplay->setText(text + "2.7182818");
-            lastEntered = "2.7182818";
-        }
+    QString text = currentDisplay->text();
+    bool lastWasNumber;
+    lastEntered.toDouble(&lastWasNumber);
+    if(displayIsEmpty){
+        text = E;
+        lastEntered = E;
+        displayIsEmpty = false;
     }
+    else if(QString("+-*/(").contains(lastEntered)){
+        text += E;
+    }
+    else if(lastEntered == ')' || lastWasNumber){
+        text = text + '*' + E;
+    }
+    currentDisplay->setText(text);
+    lastEntered = E;
 }
 
+//ліва дужка
 void MainWindow::on_LeftParenButton_clicked()
 {
     QString text = currentDisplay->text();
-    if(QString("+-*/").contains(lastEntered)){
-        if(displayIsEmpty){
-            text = "(";
-            currentDisplay->setText(text);
-        }
+    leftParenCount++;
+    //якзо екран пустий
+    if (displayIsEmpty) {
+        text = "(";
+        currentDisplay->setText(text);
+        displayIsEmpty = false;
+    //якщо останній раз був введений оператор
+    } else if (QString("+-*/(").contains(lastEntered)) {
+        currentDisplay->setText(text + "(");
+    //
+    } else {
+        currentDisplay->setText(text + "*(");
+    }
+    lastEntered = "(";
+}
+
+//права дужка
+void MainWindow::on_RightParenButton_clicked()
+{
+    if(leftParenCount > rightParenCount){
+        rightParenCount++;
+        QString text = currentDisplay->text();
+        //якзо останній був ведений оператор, то дужки ще закривати не можна
+        if(QString("+-*/").contains(lastEntered)) return;
         else{
-            text += '(';
-            currentDisplay->setText(text);
+            currentDisplay->setText(text + ')');
         }
     }
-    else{
-
-    }
-
 }
 

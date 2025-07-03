@@ -1,6 +1,7 @@
 #include "CalculatorEngine.h"
 
 // Токенізуємо вхідний текстовий рядок у список токенів
+// додати випадки для abs, exp, mod, log, ln, yroot, ^
 QVector<Token> CalculatorEngine::tokenize(const QString& text) {
     QVector<Token> tokens;
     int i = 0;
@@ -259,6 +260,24 @@ bool CalculatorEngine::isWrappedInParentheses(const QString& text, int numberSta
     return ok;
 }
 
+QString CalculatorEngine::extractExpressionInParentheses(const QString &text, int &startIndex) {
+    int end = text.length() - 1;
+    if (text[end] != ')') return "";
+
+    int balance = 0;
+    for (int i = end; i >= 0; --i) {
+        if (text[i] == ')') balance++;
+        else if (text[i] == '(') balance--;
+
+        if (balance == 0) {
+            startIndex = i;
+            return text.mid(i, end - i + 1); // включно з дужками
+        }
+    }
+    return "";
+}
+
+
 //функція для 1/число
 QString CalculatorEngine::reverseNumber(const QString &expression)
 {
@@ -305,26 +324,40 @@ QString CalculatorEngine::reverseNumber(const QString &expression)
 //функція для піднесення до квадрату
 QString CalculatorEngine::squareNumber(const QString &expression){
     QString text = expression;
-    int numberStartIndex;
-    double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
 
-    //підносимо число до квадрата
+    int numberStartIndex;
+    QString subExpr;
+
+    // Перевірка чи в кінці стоїть дужка
+    if (text.endsWith(')')) {
+        subExpr = CalculatorEngine::extractExpressionInParentheses(text, numberStartIndex);
+        if (!subExpr.isEmpty()) {
+            QVector<Token> tokens = CalculatorEngine::tokenize(subExpr.mid(1, subExpr.length() - 2)); // без дужок
+            QQueue<Token> rpn = CalculatorEngine::parsing(tokens);
+            double value = CalculatorEngine::evaluate(rpn);
+            value *= value;
+
+            // видалити підвираз із text
+            text = text.left(numberStartIndex);
+            text += QString::number(value, 'g', 15);
+            return text;
+        }
+    }
+
+    // Інакше працюємо по-старому
+    double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
     number *= number;
 
-    //якщо число загорнуте в дужки
     if(CalculatorEngine::isWrappedInParentheses(text, numberStartIndex)){
-        // Знаходимо позицію відкриваючої дужки
         numberStartIndex = text.lastIndexOf('(', numberStartIndex);
     }
 
-    // Видаляємо його з виразу
     text = CalculatorEngine::removeLastNumber(text, numberStartIndex);
-
-    // Додаємо до виразу
     text += QString::number(number, 'g', 15);
 
     return text;
 }
+
 
 //функція для знаходження квадратного кореня
 QString CalculatorEngine::squareRootNumber(const QString &expression, int& posOfSqrt)

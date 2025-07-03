@@ -35,7 +35,7 @@ private:
     static QString wrapAsReciprocal(const QString& expression); // для "1/(...)"
     static QString removeLastNumber(const QString& text, int startIndex);
     static bool isWrappedInParentheses(const QString& text, int numberStartIndex);
-
+    static QString extractExpressionInParentheses(const QString &text, int &startIndex);
 
 };
 

@@ -867,7 +867,7 @@
         <string>0</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="getPercent1_3">
+      <widget class="QPushButton" name="RightParenButton">
        <property name="geometry">
         <rect>
          <x>130</x>
@@ -1058,7 +1058,7 @@
       <zorder>sevenNum1</zorder>
       <zorder>toolButtonMenu1</zorder>
       <zorder>changeSign1</zorder>
-      <zorder>getPercent1_3</zorder>
+      <zorder>RightParenButton</zorder>
       <zorder>LeftParenButton</zorder>
       <zorder>eButton</zorder>
       <zorder>absButton</zorder>

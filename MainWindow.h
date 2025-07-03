@@ -20,20 +20,27 @@ public:
 
 private slots:
     void onButtonClicked();
+
     void on_deleteButton_clicked();
+
     void on_deleteLine_clicked();
+
     void on_deleteAll_clicked();
+
     void on_equal_clicked();
+
     void on_changeSign_clicked();
+
     void on_reverseNumber_clicked();
+
     void on_squareNumber_clicked();
+
     void on_squareRoot_clicked();
+
     void on_getPercent_clicked();
 
     void setStandardMode();
     void setEngineeringMode();
-
-
 
     void on_piButton_clicked();
 
@@ -41,10 +48,16 @@ private slots:
 
     void on_LeftParenButton_clicked();
 
+    void on_RightParenButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     bool displayIsEmpty = true;
     QString lastEntered;
+    const QString PI = "3.1415926";
+    const QString E = "2.7182818";
+    int leftParenCount = 0;
+    int rightParenCount = 0;
 
     // Current active widgets and buttons
     QLabel* currentDisplay;
