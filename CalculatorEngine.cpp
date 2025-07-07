@@ -30,12 +30,18 @@ QVector<Token> CalculatorEngine::tokenize(const QString& text) {
 
         // Обробка функцій (abs, ln, log, тощо)
         if (ch.isLetter()) {
-            QString funcName;
+            QString word;
             while (i < text.length() && text.at(i).isLetter()) {
-                funcName += text.at(i++);
+                word += text.at(i++);
             }
-            tokens.push_back({ Function, 0, ' ', funcName });
-            lastTokenType = Function;
+
+            if (word == "mod" || word == "yroot" || word == "exp") {
+                tokens.push_back({ Operator, 0, ' ', word });  // ← оператор з назвою
+            }
+            else {
+                tokens.push_back({ Function, 0, ' ', word }); // інші — функції
+            }
+            lastTokenType = Operator;
             continue;
         }
 
@@ -92,10 +98,13 @@ QVector<Token> CalculatorEngine::tokenize(const QString& text) {
 
 
 // Визначення пріоритету оператора
-int CalculatorEngine::getPriority(QChar op) {
-    if (op == '+' || op == '-') return 1;
-    if (op == '*' || op == '/') return 2;
-    if (op == '^') return 3;
+int CalculatorEngine::getPriority(const Token& token) {
+    if (token.type == Operator) {
+        if (token.funcName == "mod" || token.funcName == "yroot" || token.funcName == "exp") return 2;
+        if (token.op == '+' || token.op == '-') return 1;
+        if (token.op == '*' || token.op == '/') return 2;
+        if (token.op == '^') return 3;
+    }
     return 0;
 }
 
@@ -116,7 +125,7 @@ QQueue<Token> CalculatorEngine::parsing(const QVector<Token>& tokens) {
 
         case Operator:
             while (!operators.isEmpty() &&
-                   ((operators.top().type == Operator && getPriority(operators.top().op) >= getPriority(token.op)) ||
+                   ((operators.top().type == Operator && getPriority(operators.top()) >= getPriority(token)) ||
                     (operators.top().type == Function))) {
                 output.enqueue(operators.pop());
             }
@@ -163,18 +172,37 @@ double CalculatorEngine::evaluate(QQueue<Token>& rpn) {
             break;
 
         case Operator: {
-            if (stack.size() < 2) throw std::runtime_error("Недостатньо операндів");
+            if (token.funcName == "mod" || token.funcName == "yroot" || token.funcName == "exp") {
+                if (stack.size() < 2) throw std::runtime_error("Недостатньо аргументів для оператора");
 
-            double b = stack.pop();
-            double a = stack.pop();
+                double b = stack.pop();
+                double a = stack.pop();
 
-            switch (token.op.toLatin1()) {
-            case '+': stack.push(a + b); break;
-            case '-': stack.push(a - b); break;
-            case '*': stack.push(a * b); break;
-            case '/': stack.push(a / b); break;
-            case '^': stack.push(pow(a, b)); break;
-            default: throw std::runtime_error("Невідомий оператор");
+                if (token.funcName == "mod")
+                    stack.push(fmod(a, b));
+                else if (token.funcName == "yroot") {
+                    if (a < 0 && ((int)b) % 2 == 0)
+                        throw std::runtime_error("Корінь парного степеня з від’ємного");
+                    stack.push(pow(a, 1.0 / b));
+                }
+                else if (token.funcName == "exp") {
+                    stack.push(a * pow(10, b));  // ось тут!
+                }
+            } else {
+                // звичайні оператори
+                if (stack.size() < 2) throw std::runtime_error("Недостатньо операндів");
+
+                double b = stack.pop();
+                double a = stack.pop();
+
+                switch (token.op.toLatin1()) {
+                case '+': stack.push(a + b); break;
+                case '-': stack.push(a - b); break;
+                case '*': stack.push(a * b); break;
+                case '/': stack.push(a / b); break;
+                case '^': stack.push(pow(a, b)); break;
+                default: throw std::runtime_error("Невідомий оператор");
+                }
             }
             break;
         }

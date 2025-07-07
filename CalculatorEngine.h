@@ -30,7 +30,7 @@ public:
     static QString rootNumber(const QString& expression, int powerOfRoot ,int& posOfSqrt);
     static QString getPercent(const QString& expression);
 private:
-    static int getPriority(QChar oper);
+    static int getPriority(const Token& token);
     static bool isNegativeWrapped(const QString& text, int startIndex, double number);
     static QString wrapAsReciprocal(double number);
     static QString wrapAsReciprocal(const QString& expression); // для "1/(...)"

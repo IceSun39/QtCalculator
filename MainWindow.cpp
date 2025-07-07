@@ -134,7 +134,8 @@ void MainWindow::setEngineeringMode()
         page->findChild<QPushButton*>("dot1"),
         page->findChild<QPushButton*>("xToPowerButton"),
         page->findChild<QPushButton*>("modButton"),
-        page->findChild<QPushButton*>("sqrtRootNButton")
+        page->findChild<QPushButton*>("sqrtRootNButton"),
+        page->findChild<QPushButton*>("expButton")
 
     };
     // Кнопки функцій
@@ -190,7 +191,7 @@ void MainWindow::onButtonClicked()
 
     // Якщо дисплей пустий
     if (displayIsEmpty) {
-        if (buttonValue == "*" || buttonValue == "/" || buttonValue == ")" || buttonValue == "yroot" || buttonValue == '^' || buttonValue == "mod") return;
+        if (buttonValue == "*" || buttonValue == "/" || buttonValue == ")" || buttonValue == "yroot" || buttonValue == '^' || buttonValue == "mod" || buttonValue == "exp") return;
 
         if (buttonValue == ".") {
             currentDisplay->setText("0.");
