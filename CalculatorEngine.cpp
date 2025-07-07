@@ -1,174 +1,222 @@
 #include "CalculatorEngine.h"
 
 // Токенізуємо вхідний текстовий рядок у список токенів
-// додати випадки для abs, exp, mod, log, ln, yroot, ^, знаходження кореня недоробив
 QVector<Token> CalculatorEngine::tokenize(const QString& text) {
     QVector<Token> tokens;
     int i = 0;
 
-    //обробка унарного плюса
-    if(text.at(0) == '+') i++;
+    TokenType lastTokenType = Operator; // умовно, на старті вважаємо попередній токен "не числом"
 
-    for (; i < text.length(); ) {
-        // Обробка числа (ціле або з крапкою)
-        if (text.at(i).isDigit()) {
+    while (i < text.length()) {
+        QChar ch = text.at(i);
+
+        if (ch.isSpace()) {
+            ++i;
+            continue;
+        }
+
+        // Обробка чисел, включаючи ті, що починаються з крапки
+        if (ch.isDigit() || ch == '.') {
             QString res;
+            if (ch == '.') res = "0";
             while (i < text.length() && (text.at(i).isDigit() || text.at(i) == '.')) {
                 res += text.at(i++);
             }
             double num = res.toDouble();
             tokens.push_back({ Number, num, ' ' });
+            lastTokenType = Number;
             continue;
         }
 
-        // Обробка десяткових чисел, що починаються з крапки (наприклад: .5)
-        if (text.at(i) == '.') {
-            QString res = "0.";
+        // Обробка функцій (abs, ln, log, тощо)
+        if (ch.isLetter()) {
+            QString funcName;
+            while (i < text.length() && text.at(i).isLetter()) {
+                funcName += text.at(i++);
+            }
+            tokens.push_back({ Function, 0, ' ', funcName });
+            lastTokenType = Function;
+            continue;
+        }
+
+        // Обробка дужок
+        if (ch == '(') {
+            tokens.push_back({ LeftParen, 0, '(' });
             ++i;
-            while (i < text.length() && text.at(i).isDigit()) {
-                res += text.at(i++);
-            }
-            double num = res.toDouble();
-            tokens.push_back({ Number, num, ' ' });
+            lastTokenType = LeftParen;
+            continue;
+        }
+        if (ch == ')') {
+            tokens.push_back({ RightParen, 0, ')' });
+            ++i;
+            lastTokenType = RightParen;
             continue;
         }
 
-        // Обробка символів: дужки або оператори
-        if (QString("+-*/()").contains(text.at(i))) {
-            QChar ch = text.at(i++);
-            if (ch == '(') {
-                tokens.push_back({ LeftParen, 0, ch });
-            }
-            else if (ch == ')') {
-                tokens.push_back({ RightParen, 0, ch });
-            }
-            //обробка унарного та бінарного мінуса
-            else if(ch == '-'){
-                //якщо мінус на початку або ситуація типу 5*(-3)
-                if(i - 2 < 0 || text.at(i - 2) == '('){
-                    QString res;
-                    while (i < text.length() && (text.at(i).isDigit() || text.at(i) == '.')) {
-                        res += text.at(i++);
-                    }
-                    double num = res.toDouble();
-                    tokens.push_back({ Number, -num, ' ' });
-                    continue;
+        // Обробка мінуса: унарний чи бінарний?
+        if (ch == '-') {
+            bool isUnary = (lastTokenType == Operator || lastTokenType == LeftParen || lastTokenType == Function);
+            ++i;
+            if (isUnary) {
+                // Очікуємо число одразу після унарного мінуса
+                QString res;
+                if (i < text.length() && text.at(i) == '.') res = "0";
+                while (i < text.length() && (text.at(i).isDigit() || text.at(i) == '.')) {
+                    res += text.at(i++);
                 }
-                //якщо бінарний мінус
-                else{
-                    tokens.push_back({Operator, 0, '-'});
-                }
+                double num = res.toDouble();
+                tokens.push_back({ Number, -num, ' ' });
+                lastTokenType = Number;
+            } else {
+                tokens.push_back({ Operator, 0, '-' });
+                lastTokenType = Operator;
             }
-            else {
-                tokens.push_back({ Operator, 0, ch });
-            }
+            continue;
         }
 
+        // Інші оператори
+        if (QString("*/+^,").contains(ch)) {
+            tokens.push_back({ Operator, 0, ch });
+            ++i;
+            lastTokenType = Operator;
+            continue;
+        }
+
+        // Якщо дійшли сюди — щось пішло не так
+        qWarning() << "Невідомий символ у виразі:" << ch;
+        ++i;
     }
 
     return tokens;
 }
 
+
 // Визначення пріоритету оператора
-int CalculatorEngine::getPriority(QChar oper) {
-    if (oper == '+' || oper == '-') {
-        return 1;
-    }
-    else if (oper == '*' || oper == '/') {
-        return 2;
-    }
-    return -1; // Невідомий оператор
+int CalculatorEngine::getPriority(QChar op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    if (op == '^') return 3;
+    return 0;
 }
 
 // Перетворення інфіксного запису на зворотний польський (постфіксний)
 QQueue<Token> CalculatorEngine::parsing(const QVector<Token>& tokens) {
-    QQueue<Token> resQueue;  // результат (у RPN)
-    QStack<Token> st;        // стек для операторів
+    QQueue<Token> output;
+    QStack<Token> operators;
 
-    for (const auto& token : tokens) {
-        if (token.type == Number) {
-            resQueue.push_back(token); // Число — одразу в результат
-        }
-        else if (token.type == LeftParen) {
-            st.push(token); // Відкрита дужка — в стек
-        }
-        else if (token.type == RightParen) {
-            // Поки не знайдена відкрита дужка, переносимо оператори в результат
-            while (!st.isEmpty() && st.top().op != '(') {
-                resQueue.push_back(st.top());
-                st.pop();
+    for (const Token& token : tokens) {
+        switch (token.type) {
+        case Number:
+            output.enqueue(token);
+            break;
+
+        case Function:
+            operators.push(token); // функції мають вищий пріоритет
+            break;
+
+        case Operator:
+            while (!operators.isEmpty() &&
+                   ((operators.top().type == Operator && getPriority(operators.top().op) >= getPriority(token.op)) ||
+                    (operators.top().type == Function))) {
+                output.enqueue(operators.pop());
             }
-            if (!st.isEmpty()) {
-                st.pop(); // видаляємо відкриту дужку
-            } else {
-                qDebug() << "Error: unmatched closing parenthesis ')'";
+            operators.push(token);
+            break;
+
+        case LeftParen:
+            operators.push(token);
+            break;
+
+        case RightParen:
+            while (!operators.isEmpty() && operators.top().type != LeftParen) {
+                output.enqueue(operators.pop());
             }
-        }
-        else if (token.type == Operator) {
-            // Поки у стеку оператори з вищим або рівним пріоритетом — переміщаємо їх у результат
-            while (!st.isEmpty() && getPriority(st.top().op) >= getPriority(token.op)) {
-                resQueue.push_back(st.top());
-                st.pop();
+            if (!operators.isEmpty() && operators.top().type == LeftParen) {
+                operators.pop(); // викинути ліву дужку
             }
-            st.push(token);
+            // Якщо після закриваючої дужки йде функція — додаємо її
+            if (!operators.isEmpty() && operators.top().type == Function) {
+                output.enqueue(operators.pop());
+            }
+            break;
         }
     }
 
-    // Усі залишки в стеку перекидаємо в результат
-    while (!st.isEmpty()) {
-        resQueue.push_back(st.top());
-        st.pop();
+    while (!operators.isEmpty()) {
+        output.enqueue(operators.pop());
     }
 
-    return resQueue;
+    return output;
 }
 
+
 // Обчислення результату зі зворотного польського запису
-double CalculatorEngine::evaluate(QQueue<Token>& tokens) {
-    QStack<double> st;
+double CalculatorEngine::evaluate(QQueue<Token>& rpn) {
+    QStack<double> stack;
 
-    for (const auto& token : tokens) {
-        if (token.type == Number) {
-            st.push(token.value); // Кладемо число в стек
+    while (!rpn.isEmpty()) {
+        Token token = rpn.dequeue();
+
+        switch (token.type) {
+        case Number:
+            stack.push(token.value);
+            break;
+
+        case Operator: {
+            if (stack.size() < 2) throw std::runtime_error("Недостатньо операндів");
+
+            double b = stack.pop();
+            double a = stack.pop();
+
+            switch (token.op.toLatin1()) {
+            case '+': stack.push(a + b); break;
+            case '-': stack.push(a - b); break;
+            case '*': stack.push(a * b); break;
+            case '/': stack.push(a / b); break;
+            case '^': stack.push(pow(a, b)); break;
+            default: throw std::runtime_error("Невідомий оператор");
+            }
+            break;
         }
-        else if (token.type == Operator) {
-            // Має бути як мінімум 2 операнди
-            if (st.size() < 2) {
-                qDebug() << "Error: not enough operands";
-                return -1;
-            }
 
-            double right = st.top(); st.pop(); // Правий операнд
-            double left = st.top(); st.pop();  // Лівий операнд
+        case Function: {
+            if (stack.isEmpty()) throw std::runtime_error("Недостатньо аргументів для функції");
 
-            // Виконуємо відповідну операцію
-            if (token.op == '+') {
-                st.push(left + right);
+            // Для yroot і mod потрібно два аргументи
+            if (token.funcName == "mod" || token.funcName == "yroot") {
+                if (stack.size() < 2) throw std::runtime_error("Недостатньо аргументів для функції");
+
+                double b = stack.pop();
+                double a = stack.pop();
+
+                if (token.funcName == "mod")
+                    stack.push(fmod(a, b));
+                else if (token.funcName == "yroot")
+                    stack.push(pow(b, 1.0 / a));
+            } else {
+                double a = stack.pop();
+
+                if (token.funcName == "abs")
+                    stack.push(std::abs(a));
+                else if (token.funcName == "log")
+                    stack.push(log10(a));
+                else if (token.funcName == "ln")
+                    stack.push(log(a));
+                else
+                    throw std::runtime_error("Невідома функція: " + token.funcName.toStdString());
             }
-            else if (token.op == '-') {
-                st.push(left - right);
-            }
-            else if (token.op == '*') {
-                st.push(left * right);
-            }
-            else if (token.op == '/') {
-                if (right != 0.0) {
-                    st.push(left / right);
-                } else {
-                    qDebug() << "Error: division by zero";
-                    return -1;
-                }
-            }
+            break;
+        }
+
+        default:
+            throw std::runtime_error("Невідомий токен у evaluate()");
         }
     }
 
-    // Після обчислення в стеку має бути рівно одне число — результат
-    if (st.size() == 1) {
-        return st.top();
-    } else {
-        qDebug() << "Error: invalid expression";
-        return -1;
-    }
+    if (stack.size() != 1)
+        throw std::runtime_error("Помилка обчислення: зайві значення у стеку");
+
+    return stack.top();
 }
 
 // Повертає останнє число у тексті виразу та індекс першого символу цього числа
@@ -262,7 +310,7 @@ bool CalculatorEngine::isWrappedInParentheses(const QString& text, int numberSta
 
 QString CalculatorEngine::extractExpressionInParentheses(const QString &text, int &startIndex) {
     int end = text.length() - 1;
-    if (text[end] != ')') return "";
+    //if (text[end] != ')') return "";
 
     int balance = 0;
     for (int i = end; i >= 0; --i) {
@@ -276,7 +324,6 @@ QString CalculatorEngine::extractExpressionInParentheses(const QString &text, in
     }
     return "";
 }
-
 
 //функція для 1/число
 QString CalculatorEngine::reverseNumber(const QString &expression)
@@ -361,7 +408,7 @@ QString CalculatorEngine::numberToPower(const QString& expression, int power)
 
 
 //функція для знаходження квадратного кореня
-QString CalculatorEngine::rootNumber(const QString& expression, int powerOfRoot ,int& posOfSqrt)
+QString CalculatorEngine::rootNumber(const QString& expression, int powerOfRoot, int& posOfSqrt)
 {
     QString text = expression;
     QString subExpr;
@@ -372,33 +419,32 @@ QString CalculatorEngine::rootNumber(const QString& expression, int powerOfRoot 
     if (text.endsWith(')')) {
         subExpr = CalculatorEngine::extractExpressionInParentheses(text, numberStartIndex);
         if (!subExpr.isEmpty()) {
-            QVector<Token> tokens = CalculatorEngine::tokenize(subExpr.mid(1, subExpr.length() - 2)); // без дужок
+            QVector<Token> tokens = CalculatorEngine::tokenize(subExpr.mid(1, subExpr.length() - 2));
             QQueue<Token> rpn = CalculatorEngine::parsing(tokens);
             double value = CalculatorEngine::evaluate(rpn);
-            if(value < 0 && powerOfRoot % 2 == 0){
+
+            if (value < 0 && powerOfRoot % 2 == 0) {
                 return "Error, finding root from negative value";
             }
-            else pow(value, powerOfRoot);
 
-            // видалити підвираз із text
+            value = std::pow(value, 1.0 / powerOfRoot);
+
+            // Видаляємо підвираз
             text = text.left(numberStartIndex);
             text += QString::number(value, 'g', 15);
             return text;
         }
     }
 
+    // Якщо просто число без дужок
+    if (number < 0 && powerOfRoot % 2 == 0) {
+        return "Error, finding root from negative value";
+    }
 
-    // Обчислюємо корінь
-    number = std::pow(number, powerOfRoot);;
+    number = std::pow(number, 1.0 / powerOfRoot);
 
-
-    //зберігаємо індекс куди вставити значок кореня
     posOfSqrt = numberStartIndex;
-
-    // Видаляємо останнє число (з дужками, якщо були)
     text = CalculatorEngine::removeLastNumber(text, numberStartIndex);
-
-    // Додаємо результат
     text += QString::number(number, 'g', 15);
 
     return text;

@@ -8,20 +8,21 @@
 #include <QDebug>
 #include <cmath>
 
-enum TokenType { Number, Operator, LeftParen, RightParen };
+enum TokenType { Number, Operator, LeftParen, RightParen, Function };
 
 struct Token {
     TokenType type;
     double value;
     QChar op;
-};
+    QString funcName;
+};;
 
 class CalculatorEngine
 {
 public:
     static QVector<Token> tokenize(const QString& text);
     static QQueue<Token> parsing(const QVector<Token>& tokens);
-    static double evaluate(QQueue<Token>& tokens);
+    static double evaluate(QQueue<Token>& rnp);
     static double getLastNumber(const QString& text, int& lastIndex);
     static QString toggleLastNumberSign(const QString& expression);
     static QString reverseNumber(const QString& expression);

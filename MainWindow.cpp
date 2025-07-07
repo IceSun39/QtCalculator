@@ -131,7 +131,17 @@ void MainWindow::setEngineeringMode()
         page->findChild<QPushButton*>("minus1"),
         page->findChild<QPushButton*>("multiply1"),
         page->findChild<QPushButton*>("division1"),
-        page->findChild<QPushButton*>("dot1")
+        page->findChild<QPushButton*>("dot1"),
+        page->findChild<QPushButton*>("xToPowerButton"),
+        page->findChild<QPushButton*>("modButton"),
+        page->findChild<QPushButton*>("sqrtRootNButton")
+
+    };
+    // Кнопки функцій
+    currentFunctButtons = {
+        page->findChild<QPushButton*>("lnButton"),
+        page->findChild<QPushButton*>("logButton"),
+        page->findChild<QPushButton*>("absButton"),
     };
 
     // Інші функціональні кнопки
@@ -151,6 +161,8 @@ void MainWindow::setEngineeringMode()
     //підключення операторів
     for (auto *btn : currentOperatorButtons)
         connect(btn, &QPushButton::clicked, this, &MainWindow::onButtonClicked, Qt::UniqueConnection);
+    for (auto *btn : currentFunctButtons)
+        connect(btn, &QPushButton::clicked, this, &MainWindow::onFunctClicked, Qt::UniqueConnection);
     //підлючення функціональних кнопок
     connect(currentEqualButton, &QPushButton::clicked, this, &MainWindow::on_equal_clicked, Qt::UniqueConnection);
     connect(currentDeleteButton, &QPushButton::clicked, this, &MainWindow::on_deleteButton_clicked, Qt::UniqueConnection);
@@ -173,10 +185,12 @@ void MainWindow::onButtonClicked()
 
     QString buttonValue = clickedButton->text();
     QString currentText = currentDisplay->text();
+    if(buttonValue == "√n") buttonValue = "yroot";
+    if(buttonValue == "x^y") buttonValue = '^';
 
     // Якщо дисплей пустий
     if (displayIsEmpty) {
-        if (buttonValue == "*" || buttonValue == "/" || buttonValue == ")") return;
+        if (buttonValue == "*" || buttonValue == "/" || buttonValue == ")" || buttonValue == "yroot" || buttonValue == '^' || buttonValue == "mod") return;
 
         if (buttonValue == ".") {
             currentDisplay->setText("0.");
@@ -224,6 +238,33 @@ void MainWindow::onButtonClicked()
         else
             lastEntered += buttonValue;
     }
+}
+
+void MainWindow::onFunctClicked()
+{
+
+    QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
+    if (!clickedButton || !currentDisplay)
+        return;
+
+    QString buttonValue = clickedButton->text();
+    QString text = currentDisplay->text();
+    if(buttonValue == "|x|") buttonValue = "abs";
+
+    leftParenCount++;
+    //якзо екран пустий
+    if (displayIsEmpty) {
+        text = buttonValue + '(';
+        currentDisplay->setText(text);
+        displayIsEmpty = false;
+        //якщо останній раз був введений оператор
+    } else if (QString("+-*/(").contains(lastEntered)) {
+        currentDisplay->setText(text + buttonValue + '(');
+        //
+    } else {
+        currentDisplay->setText(text + '*' + buttonValue + '(');
+    }
+    lastEntered = buttonValue;
 }
 
 //видалення останнього символу
@@ -403,44 +444,6 @@ void MainWindow::on_RightParenButton_clicked()
     }
 }
 
-void MainWindow::on_lnButton_clicked()
-{
-    QString text = currentDisplay->text();
-    leftParenCount++;
-    //якзо екран пустий
-    if (displayIsEmpty) {
-        text = "ln(";
-        currentDisplay->setText(text);
-        displayIsEmpty = false;
-    //якщо останній раз був введений оператор
-    } else if (QString("+-*/(").contains(lastEntered)) {
-        currentDisplay->setText(text + "ln(");
-        //
-    } else {
-        currentDisplay->setText(text + "*ln(");
-    }
-    lastEntered = "ln(";
-}
-
-void MainWindow::on_logButton_clicked()
-{
-    QString text = currentDisplay->text();
-    leftParenCount++;
-    //якзо екран пустий
-    if (displayIsEmpty) {
-        text = "log(";
-        currentDisplay->setText(text);
-        displayIsEmpty = false;
-    //якщо останній раз був введений оператор
-    } else if (QString("+-*/(").contains(lastEntered)) {
-        currentDisplay->setText(text + "log(");
-        //
-    } else {
-        currentDisplay->setText(text + "*log(");
-    }
-    lastEntered = "log(";
-}
-
 void MainWindow::on_tenToPowerButton_clicked()
 {
     QString text = currentDisplay->text();
@@ -452,64 +455,8 @@ void MainWindow::on_tenToPowerButton_clicked()
     //якщо останній раз був введений оператор
     } else if (QString("+-*/(").contains(lastEntered)) {
         currentDisplay->setText(text + "10^");
-        //
     } else {
         currentDisplay->setText(text + "*10^");
     }
-    lastEntered = "10^";
+    lastEntered = "^";
 }
-
-void MainWindow::on_xToPowerButton_clicked()
-{
-    QString text = currentDisplay->text();
-    bool lastWasNumber;
-    lastEntered.toDouble(&lastWasNumber);
-
-    //підносити в степінь можна тільки якщо останнє введене було число або ')'
-    if(lastWasNumber || lastEntered == ')'){
-        currentDisplay->setText(text + '^');
-        lastEntered = "^";
-    }
-}
-
-void MainWindow::on_sqrtRootNButton_clicked()
-{
-    QString text = currentDisplay->text();
-    bool lastWasNumber;
-    lastEntered.toDouble(&lastWasNumber);
-
-    //знаходити корінь можна тільки якщо останнє введене було число або ')'
-    if(lastWasNumber || lastEntered == ')'){
-        currentDisplay->setText(text + "ysqrt");
-        lastEntered = "ysqrt";
-    }
-}
-
-
-void MainWindow::on_absButton_clicked()
-{
-    QString text = currentDisplay->text();
-    bool lastWasNumber;
-    lastEntered.toDouble(&lastWasNumber);
-    leftParenCount++;
-
-    // Знаходимо останнє число у виразі та індекс, з якого воно починається
-    int numberStartIndex;
-    double number = CalculatorEngine::getLastNumber(text, numberStartIndex);
-
-    int numberPrevIndex = numberStartIndex == 0 ? 0 : numberStartIndex - 1;
-
-    if(displayIsEmpty){
-        text = "abs(";
-        currentDisplay->setText(text);
-    }
-    else if(lastWasNumber){
-        text.insert(numberPrevIndex, "abs(");
-        currentDisplay->setText(text);
-    }
-    else{
-        currentDisplay->setText(text + "*abs(");
-    }
-    lastEntered = "abs(";
-}
-

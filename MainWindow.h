@@ -21,6 +21,8 @@ public:
 private slots:
     void onButtonClicked();
 
+    void onFunctClicked();
+
     void on_deleteButton_clicked();
 
     void on_deleteLine_clicked();
@@ -51,17 +53,7 @@ private slots:
 
     void on_RightParenButton_clicked();
 
-    void on_lnButton_clicked();
-
-    void on_logButton_clicked();
-
     void on_tenToPowerButton_clicked();
-
-    void on_xToPowerButton_clicked();
-
-    void on_sqrtRootNButton_clicked();
-
-    void on_absButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -77,6 +69,7 @@ private:
     QLabel* currentUpperDisplay;
     QList<QPushButton*> currentDigitButtons;
     QList<QPushButton*> currentOperatorButtons;
+    QList<QPushButton*> currentFunctButtons;
     QPushButton* currentEqualButton;
     QPushButton* currentDeleteButton;
     QPushButton* currentDeleteAllButton;
