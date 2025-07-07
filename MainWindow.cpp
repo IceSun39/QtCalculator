@@ -273,9 +273,13 @@ void MainWindow::on_deleteButton_clicked()
 {
     if(!displayIsEmpty){
         QString text = currentDisplay->text();
+        int lastNumberIndex;
         text.chop(1); // видаляє останній символ
         lastEntered.chop(1);
         currentDisplay->setText(text);
+        if(lastEntered.isEmpty()){
+            lastEntered = QString::number(CalculatorEngine::getLastNumber(text, lastNumberIndex));
+        }
     }
     if(currentDisplay->text().isEmpty()){
         displayIsEmpty = true;

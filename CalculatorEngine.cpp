@@ -247,6 +247,11 @@ double CalculatorEngine::evaluate(QQueue<Token>& rpn) {
     return stack.top();
 }
 
+double CalculatorEngine::getLastNumber(const QString &text)
+{
+
+}
+
 // Повертає останнє число у тексті виразу та індекс першого символу цього числа
 double CalculatorEngine::getLastNumber(const QString& text, int& numberStartIndex)
 {
